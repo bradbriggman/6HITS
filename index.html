@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Instrument Currency (61.57(c))</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0b1b33;
+      color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .panel {
+      background: #122445;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      width: 100%;
+      max-width: 1100px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.4);
+    }
+
+    .top-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: #1f6feb;
+      color: #fff;
+    }
+
+    button:disabled {
+      opacity: 0.4;
+      cursor: default;
+    }
+
+    .log-options {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .sim-container {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      .sim-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Pilot + thought bubble */
+    .pilot-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pilot-figure {
+      width: 120px;
+      height: 180px;
+      background: #1f2937;
+      border-radius: 10px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Placeholder pilot block – you can replace with actual image later */
+    .pilot-body {
+      width: 70px;
+      height: 150px;
+      background: linear-gradient(#ffffff 0 60%, #1f2937 60% 100%);
+      border-radius: 6px;
+      position: relative;
+      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+    }
+
+    .pilot-head {
+      width: 40px;
+      height: 40px;
+      background: #facc9b;
+      border-radius: 50%;
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid #111827;
+    }
+
+    .pilot-hat {
+      width: 50px;
+      height: 18px;
+      background: #111827;
+      border-radius: 10px 10px 4px 4px;
+      position: absolute;
+      top: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 2px solid #0f172a;
+    }
+
+    .thought-bubble {
+      margin-top: 8px;
+      background: #f9fafb;
+      color: #111827;
+      border-radius: 16px;
+      padding: 10px 12px;
+      max-width: 260px;
+      font-size: 0.9rem;
+      position: relative;
+    }
+
+    .thought-bubble::before {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 30px;
+      width: 16px;
+      height: 16px;
+      background: #f9fafb;
+      border-radius: 50%;
+    }
+
+    .thought-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 20px;
+      width: 10px;
+      height: 10px;
+      background: #f9fafb;
+      border-radius: 50%;
+    }
+
+    .thought-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .thought-list {
+      margin: 0;
+      padding-left: 16px;
+    }
+
+    /* Factory area */
+    .factory-area {
+      background: #0a162b;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .factory-inner {
+      position: relative;
+      width: 700px;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    .chute {
+      position: absolute;
+      left: 0;
+      top: 40px;
+      width: 80px;
+      height: 80px;
+      background: #1f2937;
+      border-radius: 10px;
+      border: 3px solid #111827;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+
+    .chute::after {
+      content: "";
+      position: absolute;
+      right: -20px;
+      bottom: 10px;
+      width: 40px;
+      height: 20px;
+      background: #111827;
+      border-radius: 0 10px 10px 0;
+    }
+
+    .belt {
+      position: relative;
+      height: 60px;
+      background: #111827;
+      border-radius: 16px;
+      margin-left: 120px;
+      margin-right: 40px;
+      overflow: hidden;
+      border: 3px solid #020617;
+      box-shadow: 0 4px 0 #020617;
+    }
+
+    .belt-rollers {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 16px;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 8px;
+      padding: 0 8px;
+    }
+
+    .roller {
+      flex: 0 0 20px;
+      height: 16px;
+      background: #374151;
+      border-radius: 999px;
+      box-shadow: inset 0 0 4px rgba(0,0,0,0.7);
+    }
+
+    .belt-label {
+      text-align: center;
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+      font-weight: 600;
+    }
+
+    .belt-step {
+      width: 40px;
+      height: 30px;
+      background: #020617;
+      position: absolute;
+      left: 120px;
+      top: 120px;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 0 #000;
+    }
+
+    .belt1-wrapper {
+      margin-top: 40px;
+    }
+
+    .belt2-wrapper {
+      margin-top: 40px;
+    }
+
+    .month-markers {
+      position: absolute;
+      top: -18px;
+      left: 120px;
+      right: 40px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #9ca3af;
+    }
+
+    .month-markers span {
+      position: relative;
+    }
+
+    .month-markers span::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 6px;
+      background: #9ca3af;
+    }
+
+    .boxes-layer {
+      position: absolute;
+      left: 120px;
+      right: 40px;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+    }
+
+    .box {
+      position: absolute;
+      width: 70px;
+      height: 40px;
+      background: #fbbf24;
+      border-radius: 6px;
+      border: 3px solid #92400e;
+      box-shadow: 0 4px 0 #78350f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111827;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    .box-label {
+      padding: 0 4px;
+      text-align: center;
+    }
+
+    .dumpster {
+      position: absolute;
+      right: 0;
+      bottom: 10px;
+      width: 70px;
+      height: 60px;
+      background: #14532d;
+      border-radius: 8px 8px 4px 4px;
+      border: 3px solid #022c22;
+      box-shadow: 0 4px 0 #022c22;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      color: #bbf7d0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      padding-bottom: 4px;
+    }
+
+    .ipc-banner {
+      position: absolute;
+      inset: 0;
+      background: rgba(127,29,29,0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fee2e2;
+      font-weight: 800;
+      font-size: 2rem;
+      text-align: center;
+      z-index: 20;
+    }
+
+    .ipc-banner button {
+      margin-top: 12px;
+      background: #f97316;
+      color: #111827;
+    }
+
+    .note {
+      font-size: 0.8rem;
+      color: #9ca3af;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Instrument Currency (61.57(c))</h1>
+
+  <div class="panel">
+    <div class="top-controls">
+      <button id="beginBtn">Begin</button>
+
+      <div class="log-options">
+        <label><input type="checkbox" name="item" value="Approach" /> Approach</label>
+        <label><input type="checkbox" name="item" value="Hold" /> Hold</label>
+        <label><input type="checkbox" name="item" value="Intercept" /> Intercept</label>
+        <label><input type="checkbox" name="item" value="Track" /> Track</label>
+        <button id="logBtn">Log</button>
+      </div>
+    </div>
+    <div class="note">
+      Belts move only when items are logged. Each box represents a logged event and moves 1 month every 3 seconds from 0–12 months.
+    </div>
+  </div>
+
+  <div class="panel sim-container">
+    <div class="factory-area">
+      <div class="factory-inner">
+        <div class="chute">CHUTE</div>
+
+        <div class="month-markers">
+          <span>0</span>
+          <span>1</span>
+          <span>2</span>
+          <span>3</span>
+          <span>4</span>
+          <span>5</span>
+          <span>6</span>
+          <span>7</span>
+          <span>8</span>
+          <span>9</span>
+          <span>10</span>
+          <span>11</span>
+          <span>12</span>
+        </div>
+
+        <div class="belt1-wrapper">
+          <div class="belt">
+            <div class="belt-rollers">
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            </div>
+          </div>
+          <div class="belt-label">Current (0–6 months)</div>
+        </div>
+
+        <div class="belt-step"></div>
+
+        <div class="belt2-wrapper">
+          <div class="belt" style="margin-top: 20px;">
+            <div class="belt-rollers">
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            </div>
+          </div>
+          <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
+        </div>
+
+        <div class="boxes-layer" id="boxesLayer"></div>
+
+        <div class="dumpster">DUMPSTER</div>
+
+        <div class="ipc-banner" id="ipcBanner" style="display:none;">
+          <div>IPC REQUIRED</div>
+          <button id="resetBtn">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="pilot-area">
+      <div class="pilot-figure">
+        <div class="pilot-body">
+          <div class="pilot-hat"></div>
+          <div class="pilot-head"></div>
+        </div>
+      </div>
+      <div class="thought-bubble" id="thoughtBubble">
+        <div class="thought-title">Instrument Currency</div>
+        <ul class="thought-list" id="thoughtList">
+          <li>I need 6 approaches</li>
+          <li>I need 1 hold</li>
+          <li>I need 1 intercept</li>
+          <li>I need 1 track</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // CONFIG
+    const MONTH_PIXELS = 50;      // 1 month = 50px
+    const TOTAL_MONTHS = 12;
+    const BELT1_END_MONTH = 6;    // 0–6 current
+    const BELT2_END_MONTH = 12;   // 7–12 grace
+    const MONTHS_PER_SECOND = 1/3; // 1 month every 3 seconds
+
+    // STATE
+    let simStarted = false;
+    let beltsRunning = false;
+    let lastTimestamp = null;
+    let boxes = []; // { id, label, month, requiredType, satisfied }
+
+    let needs = {
+      Approach: 6,
+      Hold: 1,
+      Intercept: 1,
+      Track: 1
+    };
+
+    let ipcTriggered = false;
+
+    // ELEMENTS
+    const beginBtn = document.getElementById("beginBtn");
+    const logBtn = document.getElementById("logBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const boxesLayer = document.getElementById("boxesLayer");
+    const ipcBanner = document.getElementById("ipcBanner");
+    const thoughtList = document.getElementById("thoughtList");
+    const thoughtBubble = document.getElementById("thoughtBubble");
+
+    const itemCheckboxes = document.querySelectorAll("input[name='item']");
+
+    // HELPERS
+    function updateThoughtBubble() {
+      thoughtList.innerHTML = "";
+
+      const remaining = [];
+      if (needs.Approach > 0) remaining.push(`I need ${needs.Approach} approach${needs.Approach > 1 ? "es" : ""}`);
+      if (needs.Hold > 0) remaining.push(`I need 1 hold`);
+      if (needs.Intercept > 0) remaining.push(`I need 1 intercept`);
+      if (needs.Track > 0) remaining.push(`I need 1 track`);
+
+      if (remaining.length === 0) {
+        const li = document.createElement("li");
+        li.textContent = "I am current";
+        thoughtList.appendChild(li);
+      } else {
+        remaining.forEach(text => {
+          const li = document.createElement("li");
+          li.textContent = text;
+          thoughtList.appendChild(li);
+        });
+      }
+    }
+
+    function createBox(label) {
+      const id = "box-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+      const div = document.createElement("div");
+      div.className = "box";
+      div.id = id;
+      div.style.left = "0px";
+      div.style.top = "20px"; // start on belt 1
+      const span = document.createElement("div");
+      span.className = "box-label";
+      span.textContent = label.toUpperCase();
+      div.appendChild(span);
+      boxesLayer.appendChild(div);
+
+      boxes.push({
+        id,
+        label,
+        month: 0,
+        onBelt: 1, // 1 or 2
+        active: true
+      });
+    }
+
+    function clearCheckboxes() {
+      itemCheckboxes.forEach(cb => cb.checked = false);
+    }
+
+    function startBeltsIfNeeded() {
+      if (!beltsRunning && boxes.length > 0 && simStarted && !ipcTriggered) {
+        beltsRunning = true;
+        lastTimestamp = null;
+        requestAnimationFrame(tick);
+      }
+    }
+
+    function stopBelts() {
+      beltsRunning = false;
+      lastTimestamp = null;
+    }
+
+    function triggerIPC() {
+      ipcTriggered = true;
+      stopBelts();
+      ipcBanner.style.display = "flex";
+    }
+
+    function resetSim() {
+      ipcTriggered = false;
+      simStarted = false;
+      stopBelts();
+      boxes.forEach(b => {
+        const el = document.getElementById(b.id);
+        if (el) el.remove();
+      });
+      boxes = [];
+      needs = { Approach: 6, Hold: 1, Intercept: 1, Track: 1 };
+      updateThoughtBubble();
+      ipcBanner.style.display = "none";
+    }
+
+    function updateBoxesPositions(deltaSeconds) {
+      const deltaMonths = deltaSeconds * MONTHS_PER_SECOND;
+
+      for (const box of boxes) {
+        if (!box.active) continue;
+
+        box.month += deltaMonths;
+
+        // Determine belt and vertical position
+        if (box.month <= BELT1_END_MONTH) {
+          box.onBelt = 1;
+        } else if (box.month <= BELT2_END_MONTH) {
+          box.onBelt = 2;
+        } else {
+          // Past 12 months -> dumpster
+          box.active = false;
+          const el = document.getElementById(box.id);
+          if (el) el.remove();
+
+          // If this box represents a required item that we still need, IPC
+          // In this first version, ANY box reaching dumpster triggers IPC
+          if (!ipcTriggered) {
+            triggerIPC();
+          }
+          continue;
+        }
+
+        const el = document.getElementById(box.id);
+        if (!el) continue;
+
+        const x = box.month * MONTH_PIXELS;
+        el.style.left = x + "px";
+
+        if (box.onBelt === 1) {
+          el.style.top = "20px";
+        } else {
+          el.style.top = "120px";
+        }
+      }
+
+      // Remove inactive boxes from array
+      boxes = boxes.filter(b => b.active);
+      if (boxes.length === 0) {
+        stopBelts();
+      }
+    }
+
+    function tick(timestamp) {
+      if (!beltsRunning || ipcTriggered) return;
+
+      if (lastTimestamp == null) {
+        lastTimestamp = timestamp;
+        requestAnimationFrame(tick);
+        return;
+      }
+
+      const deltaMs = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+      const deltaSeconds = deltaMs / 1000;
+
+      updateBoxesPositions(deltaSeconds);
+      requestAnimationFrame(tick);
+    }
+
+    // EVENTS
+    beginBtn.addEventListener("click", () => {
+      simStarted = true;
+      startBeltsIfNeeded();
+    });
+
+    logBtn.addEventListener("click", () => {
+      if (!simStarted || ipcTriggered) return;
+
+      const selected = Array.from(itemCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+      if (selected.length === 0) {
+        alert("Select at least one item to log.");
+        return;
+      }
+
+      // For now, log one at a time (first selected)
+      const label = selected[0];
+
+      // Decrement needs if still needed
+      if (label === "Approach" && needs.Approach > 0) needs.Approach--;
+      if (label === "Hold" && needs.Hold > 0) needs.Hold--;
+      if (label === "Intercept" && needs.Intercept > 0) needs.Intercept--;
+      if (label === "Track" && needs.Track > 0) needs.Track--;
+
+      updateThoughtBubble();
+      createBox(label);
+      clearCheckboxes();
+      startBeltsIfNeeded();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      resetSim();
+    });
+
+    // Init
+    updateThoughtBubble();
+  </script>
+</body>
+</html>
