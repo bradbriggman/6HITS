@@ -47,11 +47,6 @@
       color: #fff;
     }
 
-    button:disabled {
-      opacity: 0.4;
-      cursor: default;
-    }
-
     .log-options {
       display: flex;
       gap: 12px;
@@ -59,89 +54,52 @@
       align-items: center;
     }
 
+    /* SIM LAYOUT */
     .sim-container {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 20px;
-      align-items: flex-start;
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin-top: 20px;
     }
 
-    @media (max-width: 900px) {
-      .sim-container {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Pilot + thought bubble */
-    .pilot-area {
+    /* PILOT */
+    .pilot-wrapper {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 200px;
+      z-index: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 10px;
     }
 
-    .pilot-figure {
-      width: 120px;
-      height: 180px;
-      background: #1f2937;
-      border-radius: 10px;
-      position: relative;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      overflow: hidden;
+    .pilot-img {
+      width: 160px;
+      height: auto;
+      margin-bottom: 10px;
     }
 
-    /* Placeholder pilot block – you can replace with actual image later */
-    .pilot-body {
-      width: 70px;
-      height: 150px;
-      background: linear-gradient(#ffffff 0 60%, #1f2937 60% 100%);
-      border-radius: 6px;
-      position: relative;
-      box-shadow: 0 0 6px rgba(0,0,0,0.6);
-    }
-
-    .pilot-head {
-      width: 40px;
-      height: 40px;
-      background: #facc9b;
-      border-radius: 50%;
-      position: absolute;
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 2px solid #111827;
-    }
-
-    .pilot-hat {
-      width: 50px;
-      height: 18px;
-      background: #111827;
-      border-radius: 10px 10px 4px 4px;
-      position: absolute;
-      top: -40px;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 2px solid #0f172a;
-    }
-
+    /* THOUGHT BUBBLE ABOVE PILOT */
     .thought-bubble {
-      margin-top: 8px;
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
       background: #f9fafb;
       color: #111827;
       border-radius: 16px;
       padding: 10px 12px;
       max-width: 260px;
       font-size: 0.9rem;
-      position: relative;
+      z-index: 5;
     }
 
     .thought-bubble::before {
       content: "";
       position: absolute;
       bottom: -10px;
-      left: 30px;
+      left: 40px;
       width: 16px;
       height: 16px;
       background: #f9fafb;
@@ -152,7 +110,7 @@
       content: "";
       position: absolute;
       bottom: -20px;
-      left: 20px;
+      left: 30px;
       width: 10px;
       height: 10px;
       background: #f9fafb;
@@ -169,21 +127,16 @@
       padding-left: 16px;
     }
 
-    /* Factory area */
+    /* FACTORY AREA */
     .factory-area {
+      margin-left: 220px;
       background: #0a162b;
       border-radius: 10px;
       padding: 16px;
       box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
       position: relative;
       overflow: hidden;
-    }
-
-    .factory-inner {
-      position: relative;
-      width: 700px;
-      max-width: 100%;
-      margin: 0 auto;
+      min-height: 260px;
     }
 
     .chute {
@@ -201,17 +154,7 @@
       color: #e5e7eb;
       font-weight: 700;
       font-size: 0.8rem;
-    }
-
-    .chute::after {
-      content: "";
-      position: absolute;
-      right: -20px;
-      bottom: 10px;
-      width: 40px;
-      height: 20px;
-      background: #111827;
-      border-radius: 0 10px 10px 0;
+      z-index: 3;
     }
 
     .belt {
@@ -254,51 +197,27 @@
       font-weight: 600;
     }
 
-    .belt-step {
-      width: 40px;
-      height: 30px;
-      background: #020617;
-      position: absolute;
-      left: 120px;
-      top: 120px;
-      border-radius: 0 0 10px 10px;
-      box-shadow: 0 4px 0 #000;
-    }
-
+    /* STACKED BELTS */
     .belt1-wrapper {
       margin-top: 40px;
     }
 
     .belt2-wrapper {
-      margin-top: 40px;
+      margin-top: 10px;
     }
 
-    .month-markers {
+    .belt-step {
       position: absolute;
-      top: -18px;
       left: 120px;
-      right: 40px;
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      color: #9ca3af;
+      top: 140px;
+      width: 40px;
+      height: 20px;
+      background: #020617;
+      border-radius: 0 0 10px 10px;
+      z-index: 2;
     }
 
-    .month-markers span {
-      position: relative;
-    }
-
-    .month-markers span::after {
-      content: "";
-      position: absolute;
-      top: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 2px;
-      height: 6px;
-      background: #9ca3af;
-    }
-
+    /* BOXES */
     .boxes-layer {
       position: absolute;
       left: 120px;
@@ -306,6 +225,7 @@
       top: 0;
       bottom: 0;
       pointer-events: none;
+      z-index: 4;
     }
 
     .box {
@@ -324,11 +244,7 @@
       font-size: 0.75rem;
     }
 
-    .box-label {
-      padding: 0 4px;
-      text-align: center;
-    }
-
+    /* DUMPSTER */
     .dumpster {
       position: absolute;
       right: 0;
@@ -347,8 +263,10 @@
       font-weight: 700;
       text-align: center;
       padding-bottom: 4px;
+      z-index: 3;
     }
 
+    /* IPC */
     .ipc-banner {
       position: absolute;
       inset: 0;
@@ -364,19 +282,9 @@
       z-index: 20;
     }
 
-    .ipc-banner button {
-      margin-top: 12px;
-      background: #f97316;
-      color: #111827;
-    }
-
-    .note {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 6px;
-    }
   </style>
 </head>
+
 <body>
   <h1>Instrument Currency (61.57(c))</h1>
 
@@ -392,76 +300,14 @@
         <button id="logBtn">Log</button>
       </div>
     </div>
-    <div class="note">
-      Belts move only when items are logged. Each box represents a logged event and moves 1 month every 3 seconds from 0–12 months.
-    </div>
   </div>
 
-  <div class="panel sim-container">
-    <div class="factory-area">
-      <div class="factory-inner">
-        <div class="chute">CHUTE</div>
+  <div class="sim-container">
 
-        <div class="month-markers">
-          <span>0</span>
-          <span>1</span>
-          <span>2</span>
-          <span>3</span>
-          <span>4</span>
-          <span>5</span>
-          <span>6</span>
-          <span>7</span>
-          <span>8</span>
-          <span>9</span>
-          <span>10</span>
-          <span>11</span>
-          <span>12</span>
-        </div>
+    <!-- PILOT -->
+    <div class="pilot-wrapper">
+      <img src="pilot.png" class="pilot-img" />
 
-        <div class="belt1-wrapper">
-          <div class="belt">
-            <div class="belt-rollers">
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            </div>
-          </div>
-          <div class="belt-label">Current (0–6 months)</div>
-        </div>
-
-        <div class="belt-step"></div>
-
-        <div class="belt2-wrapper">
-          <div class="belt" style="margin-top: 20px;">
-            <div class="belt-rollers">
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            </div>
-          </div>
-          <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
-        </div>
-
-        <div class="boxes-layer" id="boxesLayer"></div>
-
-        <div class="dumpster">DUMPSTER</div>
-
-        <div class="ipc-banner" id="ipcBanner" style="display:none;">
-          <div>IPC REQUIRED</div>
-          <button id="resetBtn">Reset</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="pilot-area">
-      <div class="pilot-figure">
-        <div class="pilot-body">
-          <div class="pilot-hat"></div>
-          <div class="pilot-head"></div>
-        </div>
-      </div>
       <div class="thought-bubble" id="thoughtBubble">
         <div class="thought-title">Instrument Currency</div>
         <ul class="thought-list" id="thoughtList">
@@ -472,21 +318,58 @@
         </ul>
       </div>
     </div>
+
+    <!-- FACTORY -->
+    <div class="factory-area">
+
+      <div class="chute">CHUTE</div>
+
+      <div class="belt1-wrapper">
+        <div class="belt" id="belt1">
+          <div class="belt-rollers">
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+          </div>
+        </div>
+        <div class="belt-label">Current (0–6 months)</div>
+      </div>
+
+      <div class="belt-step"></div>
+
+      <div class="belt2-wrapper">
+        <div class="belt" id="belt2">
+          <div class="belt-rollers">
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
+          </div>
+        </div>
+        <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
+      </div>
+
+      <div class="boxes-layer" id="boxesLayer"></div>
+
+      <div class="dumpster">DUMPSTER</div>
+
+      <div class="ipc-banner" id="ipcBanner" style="display:none;">
+        <div>IPC REQUIRED</div>
+        <button id="resetBtn">Reset</button>
+      </div>
+
+    </div>
   </div>
 
   <script>
-    // CONFIG
-    const MONTH_PIXELS = 50;      // 1 month = 50px
-    const TOTAL_MONTHS = 12;
-    const BELT1_END_MONTH = 6;    // 0–6 current
-    const BELT2_END_MONTH = 12;   // 7–12 grace
-    const MONTHS_PER_SECOND = 1/3; // 1 month every 3 seconds
+    const MONTH_PIXELS = 50;
+    const BELT1_END = 6;
+    const BELT2_END = 12;
+    const SPEED = 1/3;
 
-    // STATE
     let simStarted = false;
     let beltsRunning = false;
-    let lastTimestamp = null;
-    let boxes = []; // { id, label, month, requiredType, satisfied }
+    let lastTime = null;
+    let ipc = false;
 
     let needs = {
       Approach: 6,
@@ -495,89 +378,82 @@
       Track: 1
     };
 
-    let ipcTriggered = false;
+    let boxes = [];
 
-    // ELEMENTS
     const beginBtn = document.getElementById("beginBtn");
     const logBtn = document.getElementById("logBtn");
     const resetBtn = document.getElementById("resetBtn");
+    const thoughtList = document.getElementById("thoughtList");
     const boxesLayer = document.getElementById("boxesLayer");
     const ipcBanner = document.getElementById("ipcBanner");
-    const thoughtList = document.getElementById("thoughtList");
-    const thoughtBubble = document.getElementById("thoughtBubble");
 
     const itemCheckboxes = document.querySelectorAll("input[name='item']");
 
-    // HELPERS
-    function updateThoughtBubble() {
+    function updateThought() {
       thoughtList.innerHTML = "";
 
-      const remaining = [];
-      if (needs.Approach > 0) remaining.push(`I need ${needs.Approach} approach${needs.Approach > 1 ? "es" : ""}`);
-      if (needs.Hold > 0) remaining.push(`I need 1 hold`);
-      if (needs.Intercept > 0) remaining.push(`I need 1 intercept`);
-      if (needs.Track > 0) remaining.push(`I need 1 track`);
+      const items = [];
+      if (needs.Approach > 0) items.push(`I need ${needs.Approach} approach${needs.Approach>1?"es":""}`);
+      if (needs.Hold > 0) items.push("I need 1 hold");
+      if (needs.Intercept > 0) items.push("I need 1 intercept");
+      if (needs.Track > 0) items.push("I need 1 track");
 
-      if (remaining.length === 0) {
+      if (items.length === 0) {
         const li = document.createElement("li");
         li.textContent = "I am current";
         thoughtList.appendChild(li);
       } else {
-        remaining.forEach(text => {
+        items.forEach(t => {
           const li = document.createElement("li");
-          li.textContent = text;
+          li.textContent = t;
           thoughtList.appendChild(li);
         });
       }
     }
 
     function createBox(label) {
-      const id = "box-" + Date.now() + "-" + Math.random().toString(16).slice(2);
+      const id = "box-" + Math.random().toString(16).slice(2);
       const div = document.createElement("div");
       div.className = "box";
       div.id = id;
       div.style.left = "0px";
-      div.style.top = "20px"; // start on belt 1
+      div.style.top = "20px";
+
       const span = document.createElement("div");
-      span.className = "box-label";
       span.textContent = label.toUpperCase();
       div.appendChild(span);
+
       boxesLayer.appendChild(div);
 
       boxes.push({
         id,
         label,
         month: 0,
-        onBelt: 1, // 1 or 2
         active: true
       });
     }
 
-    function clearCheckboxes() {
-      itemCheckboxes.forEach(cb => cb.checked = false);
-    }
-
-    function startBeltsIfNeeded() {
-      if (!beltsRunning && boxes.length > 0 && simStarted && !ipcTriggered) {
+    function startBelts() {
+      if (!beltsRunning && boxes.length > 0 && simStarted && !ipc) {
         beltsRunning = true;
-        lastTimestamp = null;
+        lastTime = null;
         requestAnimationFrame(tick);
       }
     }
 
     function stopBelts() {
       beltsRunning = false;
-      lastTimestamp = null;
+      lastTime = null;
     }
 
     function triggerIPC() {
-      ipcTriggered = true;
+      ipc = true;
       stopBelts();
       ipcBanner.style.display = "flex";
     }
 
     function resetSim() {
-      ipcTriggered = false;
+      ipc = false;
       simStarted = false;
       stopBelts();
       boxes.forEach(b => {
@@ -586,110 +462,87 @@
       });
       boxes = [];
       needs = { Approach: 6, Hold: 1, Intercept: 1, Track: 1 };
-      updateThoughtBubble();
+      updateThought();
       ipcBanner.style.display = "none";
     }
 
-    function updateBoxesPositions(deltaSeconds) {
-      const deltaMonths = deltaSeconds * MONTHS_PER_SECOND;
+    function updateBoxes(dt) {
+      const dm = dt * SPEED;
 
       for (const box of boxes) {
         if (!box.active) continue;
 
-        box.month += deltaMonths;
-
-        // Determine belt and vertical position
-        if (box.month <= BELT1_END_MONTH) {
-          box.onBelt = 1;
-        } else if (box.month <= BELT2_END_MONTH) {
-          box.onBelt = 2;
-        } else {
-          // Past 12 months -> dumpster
-          box.active = false;
-          const el = document.getElementById(box.id);
-          if (el) el.remove();
-
-          // If this box represents a required item that we still need, IPC
-          // In this first version, ANY box reaching dumpster triggers IPC
-          if (!ipcTriggered) {
-            triggerIPC();
-          }
-          continue;
-        }
+        box.month += dm;
 
         const el = document.getElementById(box.id);
         if (!el) continue;
 
-        const x = box.month * MONTH_PIXELS;
-        el.style.left = x + "px";
-
-        if (box.onBelt === 1) {
+        if (box.month <= BELT1_END) {
           el.style.top = "20px";
-        } else {
+        } else if (box.month <= BELT2_END) {
           el.style.top = "120px";
+        } else {
+          box.active = false;
+          el.remove();
+          if (!ipc) triggerIPC();
+          continue;
         }
+
+        el.style.left = (box.month * MONTH_PIXELS) + "px";
       }
 
-      // Remove inactive boxes from array
       boxes = boxes.filter(b => b.active);
-      if (boxes.length === 0) {
-        stopBelts();
-      }
+      if (boxes.length === 0) stopBelts();
     }
 
-    function tick(timestamp) {
-      if (!beltsRunning || ipcTriggered) return;
+    function tick(t) {
+      if (!beltsRunning || ipc) return;
 
-      if (lastTimestamp == null) {
-        lastTimestamp = timestamp;
+      if (lastTime == null) {
+        lastTime = t;
         requestAnimationFrame(tick);
         return;
       }
 
-      const deltaMs = timestamp - lastTimestamp;
-      lastTimestamp = timestamp;
-      const deltaSeconds = deltaMs / 1000;
+      const dt = (t - lastTime) / 1000;
+      lastTime = t;
 
-      updateBoxesPositions(deltaSeconds);
+      updateBoxes(dt);
       requestAnimationFrame(tick);
     }
 
-    // EVENTS
     beginBtn.addEventListener("click", () => {
       simStarted = true;
-      startBeltsIfNeeded();
+      startBelts();
     });
 
     logBtn.addEventListener("click", () => {
-      if (!simStarted || ipcTriggered) return;
+      if (!simStarted || ipc) return;
 
       const selected = Array.from(itemCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
       if (selected.length === 0) {
-        alert("Select at least one item to log.");
+        alert("Select at least one item.");
         return;
       }
 
-      // For now, log one at a time (first selected)
-      const label = selected[0];
+      selected.forEach(label => {
+        if (label === "Approach" && needs.Approach > 0) needs.Approach--;
+        if (label === "Hold" && needs.Hold > 0) needs.Hold--;
+        if (label === "Intercept" && needs.Intercept > 0) needs.Intercept--;
+        if (label === "Track" && needs.Track > 0) needs.Track--;
 
-      // Decrement needs if still needed
-      if (label === "Approach" && needs.Approach > 0) needs.Approach--;
-      if (label === "Hold" && needs.Hold > 0) needs.Hold--;
-      if (label === "Intercept" && needs.Intercept > 0) needs.Intercept--;
-      if (label === "Track" && needs.Track > 0) needs.Track--;
+        createBox(label);
+      });
 
-      updateThoughtBubble();
-      createBox(label);
-      clearCheckboxes();
-      startBeltsIfNeeded();
+      itemCheckboxes.forEach(cb => cb.checked = false);
+      updateThought();
+      startBelts();
     });
 
-    resetBtn.addEventListener("click", () => {
-      resetSim();
-    });
+    resetBtn.addEventListener("click", resetSim);
 
-    // Init
-    updateThoughtBubble();
+    updateThought();
   </script>
+
 </body>
 </html>
