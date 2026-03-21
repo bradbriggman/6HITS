@@ -49,12 +49,31 @@
 
     .log-options {
       display: flex;
-      gap: 12px;
+      gap: 16px;
       flex-wrap: wrap;
       align-items: center;
     }
 
-    /* SIM LAYOUT */
+    .counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0b1730;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .counter button {
+      padding: 2px 8px;
+      font-size: 0.9rem;
+    }
+
+    .counter-value {
+      min-width: 18px;
+      text-align: center;
+      font-weight: 700;
+    }
+
     .sim-container {
       position: relative;
       width: 100%;
@@ -66,7 +85,7 @@
     .pilot-wrapper {
       position: absolute;
       left: 0;
-      top: 0;
+      top: 40px;
       width: 200px;
       z-index: 1;
       display: flex;
@@ -77,13 +96,12 @@
     .pilot-img {
       width: 160px;
       height: auto;
-      margin-bottom: 10px;
+      margin-top: 40px;
     }
 
-    /* THOUGHT BUBBLE ABOVE PILOT */
     .thought-bubble {
       position: absolute;
-      top: -20px;
+      top: 0;
       left: 50%;
       transform: translateX(-50%);
       background: #f9fafb;
@@ -127,7 +145,7 @@
       padding-left: 16px;
     }
 
-    /* FACTORY AREA */
+    /* FACTORY */
     .factory-area {
       margin-left: 220px;
       background: #0a162b;
@@ -141,7 +159,7 @@
 
     .chute {
       position: absolute;
-      left: 0;
+      left: 40px;
       top: 40px;
       width: 80px;
       height: 80px;
@@ -162,8 +180,8 @@
       height: 60px;
       background: #111827;
       border-radius: 16px;
-      margin-left: 120px;
-      margin-right: 40px;
+      margin-left: 140px;
+      margin-right: 80px;
       overflow: hidden;
       border: 3px solid #020617;
       box-shadow: 0 4px 0 #020617;
@@ -197,31 +215,29 @@
       font-weight: 600;
     }
 
-    /* STACKED BELTS */
     .belt1-wrapper {
       margin-top: 40px;
     }
 
     .belt2-wrapper {
-      margin-top: 10px;
+      margin-top: 40px;
     }
 
     .belt-step {
       position: absolute;
-      left: 120px;
-      top: 140px;
+      left: 140px;
+      top: 150px;
       width: 40px;
-      height: 20px;
+      height: 30px;
       background: #020617;
       border-radius: 0 0 10px 10px;
       z-index: 2;
     }
 
-    /* BOXES */
     .boxes-layer {
       position: absolute;
-      left: 120px;
-      right: 40px;
+      left: 140px;
+      right: 80px;
       top: 0;
       bottom: 0;
       pointer-events: none;
@@ -230,7 +246,8 @@
 
     .box {
       position: absolute;
-      width: 70px;
+      min-width: 80px;
+      padding: 4px 8px;
       height: 40px;
       background: #fbbf24;
       border-radius: 6px;
@@ -241,15 +258,16 @@
       justify-content: center;
       color: #111827;
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
+      text-align: center;
+      white-space: nowrap;
     }
 
-    /* DUMPSTER */
     .dumpster {
       position: absolute;
-      right: 0;
-      bottom: 10px;
-      width: 70px;
+      right: 10px;
+      bottom: 20px;
+      width: 80px;
       height: 60px;
       background: #14532d;
       border-radius: 8px 8px 4px 4px;
@@ -266,7 +284,6 @@
       z-index: 3;
     }
 
-    /* IPC */
     .ipc-banner {
       position: absolute;
       inset: 0;
@@ -281,10 +298,8 @@
       text-align: center;
       z-index: 20;
     }
-
   </style>
 </head>
-
 <body>
   <h1>Instrument Currency (61.57(c))</h1>
 
@@ -293,21 +308,25 @@
       <button id="beginBtn">Begin</button>
 
       <div class="log-options">
-        <label><input type="checkbox" name="item" value="Approach" /> Approach</label>
+        <div class="counter">
+          <span>Approaches:</span>
+          <button id="approachMinusBtn">-</button>
+          <span class="counter-value" id="approachCount">0</span>
+          <button id="approachPlusBtn">+</button>
+        </div>
+
         <label><input type="checkbox" name="item" value="Hold" /> Hold</label>
         <label><input type="checkbox" name="item" value="Intercept" /> Intercept</label>
         <label><input type="checkbox" name="item" value="Track" /> Track</label>
+
         <button id="logBtn">Log</button>
       </div>
     </div>
   </div>
 
   <div class="sim-container">
-
     <!-- PILOT -->
     <div class="pilot-wrapper">
-      <img src="pilot.png" class="pilot-img" />
-
       <div class="thought-bubble" id="thoughtBubble">
         <div class="thought-title">Instrument Currency</div>
         <ul class="thought-list" id="thoughtList">
@@ -317,11 +336,11 @@
           <li>I need 1 track</li>
         </ul>
       </div>
+      <img src="pilot.png" class="pilot-img" />
     </div>
 
     <!-- FACTORY -->
     <div class="factory-area">
-
       <div class="chute">CHUTE</div>
 
       <div class="belt1-wrapper">
@@ -356,7 +375,6 @@
         <div>IPC REQUIRED</div>
         <button id="resetBtn">Reset</button>
       </div>
-
     </div>
   </div>
 
@@ -387,7 +405,15 @@
     const boxesLayer = document.getElementById("boxesLayer");
     const ipcBanner = document.getElementById("ipcBanner");
 
-    const itemCheckboxes = document.querySelectorAll("input[name='item']");
+    const holdCb = document.querySelector("input[value='Hold']");
+    const interceptCb = document.querySelector("input[value='Intercept']");
+    const trackCb = document.querySelector("input[value='Track']");
+
+    const approachMinusBtn = document.getElementById("approachMinusBtn");
+    const approachPlusBtn = document.getElementById("approachPlusBtn");
+    const approachCountSpan = document.getElementById("approachCount");
+
+    let approachCount = 0;
 
     function updateThought() {
       thoughtList.innerHTML = "";
@@ -411,17 +437,33 @@
       }
     }
 
-    function createBox(label) {
+    function updateApproachDisplay() {
+      approachCountSpan.textContent = approachCount;
+    }
+
+    approachMinusBtn.addEventListener("click", () => {
+      if (approachCount > 0) {
+        approachCount--;
+        updateApproachDisplay();
+      }
+    });
+
+    approachPlusBtn.addEventListener("click", () => {
+      if (approachCount < 6) {
+        approachCount++;
+        updateApproachDisplay();
+      }
+    });
+
+    function createCombinedBox(label) {
       const id = "box-" + Math.random().toString(16).slice(2);
       const div = document.createElement("div");
       div.className = "box";
       div.id = id;
       div.style.left = "0px";
-      div.style.top = "20px";
+      div.style.top = "40px"; // belt 1 height
 
-      const span = document.createElement("div");
-      span.textContent = label.toUpperCase();
-      div.appendChild(span);
+      div.textContent = label;
 
       boxesLayer.appendChild(div);
 
@@ -462,6 +504,11 @@
       });
       boxes = [];
       needs = { Approach: 6, Hold: 1, Intercept: 1, Track: 1 };
+      approachCount = 0;
+      updateApproachDisplay();
+      holdCb.checked = false;
+      interceptCb.checked = false;
+      trackCb.checked = false;
       updateThought();
       ipcBanner.style.display = "none";
     }
@@ -478,9 +525,9 @@
         if (!el) continue;
 
         if (box.month <= BELT1_END) {
-          el.style.top = "20px";
+          el.style.top = "40px";
         } else if (box.month <= BELT2_END) {
-          el.style.top = "120px";
+          el.style.top = "140px";
         } else {
           box.active = false;
           el.remove();
@@ -519,30 +566,51 @@
     logBtn.addEventListener("click", () => {
       if (!simStarted || ipc) return;
 
-      const selected = Array.from(itemCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-      if (selected.length === 0) {
-        alert("Select at least one item.");
+      const a = approachCount;
+      const h = holdCb.checked ? 1 : 0;
+      const i = interceptCb.checked ? 1 : 0;
+      const t = trackCb.checked ? 1 : 0;
+
+      if (a === 0 && h === 0 && i === 0 && t === 0) {
+        alert("Log at least one item.");
         return;
       }
 
-      selected.forEach(label => {
-        if (label === "Approach" && needs.Approach > 0) needs.Approach--;
-        if (label === "Hold" && needs.Hold > 0) needs.Hold--;
-        if (label === "Intercept" && needs.Intercept > 0) needs.Intercept--;
-        if (label === "Track" && needs.Track > 0) needs.Track--;
+      // Update needs
+      if (a > 0) {
+        const used = Math.min(a, needs.Approach);
+        needs.Approach -= used;
+      }
+      if (h === 1 && needs.Hold > 0) needs.Hold--;
+      if (i === 1 && needs.Intercept > 0) needs.Intercept--;
+      if (t === 1 && needs.Track > 0) needs.Track--;
 
-        createBox(label);
-      });
+      // Build label (Option A style)
+      const parts = [];
+      if (a > 0) parts.push(`${a}A`);
+      if (h > 0) parts.push(`1H`);
+      if (i > 0) parts.push(`1I`);
+      if (t > 0) parts.push(`1T`);
 
-      itemCheckboxes.forEach(cb => cb.checked = false);
+      const label = parts.join(" ");
+
+      createCombinedBox(label);
       updateThought();
+
+      // Reset batch inputs
+      approachCount = 0;
+      updateApproachDisplay();
+      holdCb.checked = false;
+      interceptCb.checked = false;
+      trackCb.checked = false;
+
       startBelts();
     });
 
     resetBtn.addEventListener("click", resetSim);
 
     updateThought();
+    updateApproachDisplay();
   </script>
-
 </body>
 </html>
