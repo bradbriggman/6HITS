@@ -652,6 +652,13 @@ document.getElementById("logBtn").addEventListener("click", () => {
 
   resetCounters();
 });
+  
+  document.getElementById("pauseBtn").addEventListener("click", () => {
+  isPaused = !isPaused;
+
+  // Update button text
+  document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+});
 
 /* Build label text from counters */
 function buildLabel() {
