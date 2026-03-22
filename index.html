@@ -603,19 +603,17 @@ const counters = {
   track: 0
 };
 
-  document.getElementById("pauseBtn").addEventListener("click", () => {
+document.getElementById("pauseBtn").addEventListener("click", () => {
     isPaused = !isPaused;
-
     document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
 
-    // ⭐ Add this block for #3
     document.querySelectorAll('.belt').forEach(belt => {
         belt.classList.toggle('paused', isPaused);
     });
 });
 
-    // Toggle button text
-    document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+// Toggle button text
+document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
 });
 
 document.querySelectorAll(".plus").forEach(btn => {
