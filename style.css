@@ -325,7 +325,7 @@
     }
 
     /* ============= BOXES + DUMPSTER ============= */
-    .boxeslayer {
+    .boxesLayer {
       position: absolute;
       left: 10px;
       right: 40px;
