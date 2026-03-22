@@ -87,10 +87,10 @@
     /* ============= PILOT + THOUGHT BUBBLE ============= */
     .pilot-wrapper {
       position: absolute;
-      left: 0;
       top: 60px;
+      left: 40px; /* aligns with chute + belt start */
       width: 200px;
-      z-index: 2; /* behind belts */
+      z-index: 2;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -168,16 +168,14 @@
     /* ============= BELTS ============= */
     .belt {
       position: relative;
-      z-index: 3; /* in front of pilot */
       height: 60px;
       background: #111827;
       border-radius: 16px;
-      margin-left: 140px;
-      margin-right: 80px;
       overflow: hidden;
       border: 3px solid #020617;
       box-shadow: 0 4px 0 #020617;
-    }
+      z-index: 3;
+   }
 
     .belt-rollers {
       position: absolute;
@@ -207,21 +205,22 @@
       font-weight: 600;
     }
 
-    /* wrappers now control staircase positioning */
-    .belt1-wrapper {
-      position: absolute;
-      top: 120px;
-      left: 80px;
-      z-index: 3;
-      width: 350px;
+    /* BELT 1 — now positioned precisely */
+     .belt1-wrapper {
+       position: absolute;
+       top: 120px;
+       left: 140px; /* where the belt actually begins */
+       width: 700px; /* doubled length */
+       z-index: 3;
     }
 
+    /* BELT 2 — starts exactly where Belt 1 ends */
     .belt2-wrapper {
       position: absolute;
       top: 200px;
-      left: calc(80px + 350px); /* starts where belt 1 ends */
+      left: calc(140px + 700px); /* belt1 left + belt1 width */
+      width: 700px; /* doubled length */
       z-index: 3;
-      width: 350px;
     }
 
     .belt-step {
@@ -312,6 +311,10 @@
       <div>
         <label for="logDate">Log Date:</label>
         <input type="date" id="logDate" />
+        <div>
+              <button id="logBtn">Log</button>
+              <button id="beginBtn">Begin</button>
+          </div>
       </div>
 
       <div class="log-options">
