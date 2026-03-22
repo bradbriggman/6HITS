@@ -185,23 +185,24 @@
 
     .thought-bubble {
       position: absolute;
-      top: -60px;
-      left: 50%;
+      top: -120px;      /* moved higher */
+      left: 60%;        /* shifted to the right */
       transform: translateX(-50%);
       background: #f9fafb;
       color: #111827;
       border-radius: 16px;
       padding: 10px 14px;
-      max-width: 700px;
+      max-width: 220px;
       font-size: 0.9rem;
       z-index: 5;
+    }
     }
 
     .thought-bubble::after {
       content: "";
       position: absolute;
       bottom: -20px;
-      left: 30px;
+      left: 40%;        /* moves tail under the bubble */
       width: 10px;
       height: 10px;
       background: #f9fafb;
