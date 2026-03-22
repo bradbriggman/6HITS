@@ -135,22 +135,25 @@ function createBox(label) {
 
   let months = 0;
 
-  const interval = setInterval(() => {
+  const pixelsPerFrame = 0.27777;
+
+const interval = setInterval(() => {
     if (isPaused) return;
 
     months++;
-    x += 60; // move right
-    box.style.left = x + "px";
 
-    // Drop to Belt 2 at 6 months
+    // Smooth movement at 16.6666px/sec
+    box.style.left = (parseFloat(box.style.left) || 0) + pixelsPerFrame + "px";
+
     if (months === 6) {
-      y += 80;
-      box.style.top = y + "px";
+        y += 500;
+        box.style.top = y + "px";
     }
+});
 
     // Dumpster at 12 months
     if (months === 12) {
-      y += 120;
+      y += 1000;
       box.style.top = y + "px";
       clearInterval(interval);
     }
