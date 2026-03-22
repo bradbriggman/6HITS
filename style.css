@@ -333,6 +333,8 @@
       bottom: 0;
       pointer-events: none;
       z-index: 4;
+      overflow: visible;
+      height: 800px;
     }
     
     .timeline1 {
