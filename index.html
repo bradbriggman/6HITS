@@ -592,6 +592,7 @@
 </html>
 
 <script>
+  let isPaused = false;   // ⭐ Global pause flag
 /* ============================
    COUNTER LOGIC
 ============================ */
@@ -601,6 +602,21 @@ const counters = {
   intercept: 0,
   track: 0
 };
+
+  document.getElementById("pauseBtn").addEventListener("click", () => {
+    isPaused = !isPaused;
+
+    document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+
+    // ⭐ Add this block for #3
+    document.querySelectorAll('.belt').forEach(belt => {
+        belt.classList.toggle('paused', isPaused);
+    });
+});
+
+    // Toggle button text
+    document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+});
 
 document.querySelectorAll(".plus").forEach(btn => {
   btn.addEventListener("click", () => {
@@ -631,7 +647,31 @@ document.getElementById("beginBtn").addEventListener("click", () => {
     rollers.style.animation = "roll 0.3s linear infinite";
   });
 });
+  
+  document.getElementById("pauseBtn").addEventListener("click", () => {
+    isPaused = !isPaused;
 
+    // Change button text
+    document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+
+    // Freeze or unfreeze belts
+    document.querySelectorAll(".belt-rollers").forEach(rollers => {
+        rollers.style.animationPlayState = isPaused ? "paused" : "running";
+    });
+});
+  
+document.getElementById("pauseBtn").addEventListener("click", () => {
+    isPaused = !isPaused;
+
+    // Change button text
+    document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+
+    // ⭐ Freeze or unfreeze belts
+    document.querySelectorAll(".belt-rollers").forEach(rollers => {
+        rollers.style.animationPlayState = isPaused ? "paused" : "running";
+    });
+}); 
+  
 /* Roller animation */
 const style = document.createElement("style");
 style.innerHTML = `
@@ -697,6 +737,7 @@ function createBox(label) {
   let months = 0;
 
   const interval = setInterval(() => {
+    if (isPaused) return;
     months++;
     x += 60; // move right
 
