@@ -1,4 +1,15 @@
 <style>
+    .logo-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    
+    .academy-logo {
+      width: 180px;   /* adjust size as needed */
+      height: auto;
+    }
     /* ============= BASE LAYOUT ============= */
     body {
       font-family: system-ui, sans-serif;
