@@ -87,7 +87,7 @@
       left: 0;
       top: 40px;
       width: 200px;
-      z-index: 1;
+      z-index: 0; /* pilot now behind belts */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -177,11 +177,12 @@
 
     .belt {
       position: relative;
+      z-index: 3; /* belt now in front of pilot */
       height: 60px;
       background: #111827;
-      border-radius: 16px;
+      border-radius: 16px;        
       margin-left: 140px;
-      margin-right: 80px;
+      margin-right: 80p;
       overflow: hidden;
       border: 3px solid #020617;
       box-shadow: 0 4px 0 #020617;
