@@ -7,155 +7,153 @@
 </head>
 
 <body>
-  <!-- your simulator content -->
 
-  <script src="script.js?v=1.0"></script>
-</body>
-</html>
+  <div class="logo-wrapper">
+    <img src="us-aviation-logo.png" alt="US Aviation Academy Logo" class="academy-logo">
+  </div>
 
-<div class="logo-wrapper">
-  <img src="us-aviation-logo.png" alt="US Aviation Academy Logo" class="academy-logo">
-</div>
- <h1>Instrument Currency (61.57(c))</h1>
+  <h1>Instrument Currency (61.57(c))</h1>
 
-<!-- TOP PANEL: CONTROLS / LOGGING -->
-<div class="top-bar">
+  <!-- TOP PANEL: CONTROLS / LOGGING -->
+  <div class="top-bar">
 
-  <!-- BEGIN BUTTON -->
-  <button id="beginBtn" class="begin-btn">Begin</button>
+    <!-- BEGIN BUTTON -->
+    <button id="beginBtn" class="begin-btn">Begin</button>
 
-  <!-- LOGGING OPTIONS -->
-  <div class="log-section">
+    <!-- LOGGING OPTIONS -->
+    <div class="log-section">
 
-    <div class="log-item">
-      <span class="log-label">Approach</span>
-      <div class="counter">
-        <button class="minus" data-type="approach">-</button>
-        <span class="counter-value" id="approachCount">0</span>
-        <button class="plus" data-type="approach">+</button>
+      <div class="log-item">
+        <span class="log-label">Approach</span>
+        <div class="counter">
+          <button class="minus" data-type="approach">-</button>
+          <span class="counter-value" id="approachCount">0</span>
+          <button class="plus" data-type="approach">+</button>
+        </div>
       </div>
+
+      <div class="log-item">
+        <span class="log-label">Hold</span>
+        <div class="counter">
+          <button class="minus" data-type="hold">-</button>
+          <span class="counter-value" id="holdCount">0</span>
+          <button class="plus" data-type="hold">+</button>
+        </div>
+      </div>
+
+      <div class="log-item">
+        <span class="log-label">Intercept</span>
+        <div class="counter">
+          <button class="minus" data-type="intercept">-</button>
+          <span class="counter-value" id="interceptCount">0</span>
+          <button class="plus" data-type="intercept">+</button>
+        </div>
+      </div>
+
+      <div class="log-item">
+        <span class="log-label">Track</span>
+        <div class="counter">
+          <button class="minus" data-type="track">-</button>
+          <span class="counter-value" id="trackCount">0</span>
+          <button class="plus" data-type="track">+</button>
+        </div>
+      </div>
+
     </div>
 
-    <div class="log-item">
-      <span class="log-label">Hold</span>
-      <div class="counter">
-        <button class="minus" data-type="hold">-</button>
-        <span class="counter-value" id="holdCount">0</span>
-        <button class="plus" data-type="hold">+</button>
-      </div>
-    </div>
-
-    <div class="log-item">
-      <span class="log-label">Intercept</span>
-      <div class="counter">
-        <button class="minus" data-type="intercept">-</button>
-        <span class="counter-value" id="interceptCount">0</span>
-        <button class="plus" data-type="intercept">+</button>
-      </div>
-    </div>
-
-    <div class="log-item">
-      <span class="log-label">Track</span>
-      <div class="counter">
-        <button class="minus" data-type="track">-</button>
-        <span class="counter-value" id="trackCount">0</span>
-        <button class="plus" data-type="track">+</button>
-      </div>
-    </div>
+    <!-- LOG + PAUSE BUTTONS -->
+    <button id="logBtn" class="log-btn">Log</button>
+    <button id="pauseBtn">Pause</button>
 
   </div>
 
-  <!-- LOG + PAUSE BUTTONS -->
-  <button id="logBtn" class="log-btn">Log</button>
-  <button id="pauseBtn">Pause</button>
+  <!-- MAIN SIMULATOR AREA -->
+  <div class="panel">
+    <div class="sim-container">
 
-</div>
-
-
-<!-- MAIN SIMULATOR AREA -->
-<div class="panel">
-  <div class="sim-container">
-
-    <!-- PILOT + THOUGHT BUBBLE -->
-    <div class="pilot-wrapper">
-      <img src="pilot.png" class="pilot-img" alt="Pilot" />
-      <div class="thought-bubble">
-        <div class="thought-title">To Stay Current:</div>
-        <ul class="thought-list">
-          <li>6 Approaches</li>
-          <li>1 Hold</li>
-          <li>1 Intercept</li>
-          <li>1 Track</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- FACTORY AREA -->
-    <div class="factory-area">
-
-      <div class="chute">CHUTE</div>
-
-      <!-- TIMELINE 1 -->
-      <div class="timeline1">
-        <div class="tick" style="left: 0px;">0</div>
-        <div class="tick" style="left: 83px;">1</div>
-        <div class="tick" style="left: 166px;">2</div>
-        <div class="tick" style="left: 249px;">3</div>
-        <div class="tick" style="left: 332px;">4</div>
-        <div class="tick" style="left: 415px;">5</div>
-        <div class="tick" style="left: 498px;">6</div>
-      </div>
-
-      <!-- BELT 1 -->
-      <div class="belt1-wrapper">
-        <div class="belt" id="belt1">
-          <div class="belt-rollers">
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-          </div>
-          <div class="belt-label">Current (0–6 months)</div>
+      <!-- PILOT + THOUGHT BUBBLE -->
+      <div class="pilot-wrapper">
+        <img src="pilot.png" class="pilot-img" alt="Pilot" />
+        <div class="thought-bubble">
+          <div class="thought-title">To Stay Current:</div>
+          <ul class="thought-list">
+            <li>6 Approaches</li>
+            <li>1 Hold</li>
+            <li>1 Intercept</li>
+            <li>1 Track</li>
+          </ul>
         </div>
       </div>
 
-      <div class="belt-step"></div>
+      <!-- FACTORY AREA -->
+      <div class="factory-area">
 
-      <!-- TIMELINE 2 -->
-      <div class="timeline2">
-        <div class="tick" style="left: 83px;">7</div>
-        <div class="tick" style="left: 166px;">8</div>
-        <div class="tick" style="left: 249px;">9</div>
-        <div class="tick" style="left: 332px;">10</div>
-        <div class="tick" style="left: 415px;">11</div>
-        <div class="tick" style="left: 498px;">12</div>
-      </div>
+        <div class="chute">CHUTE</div>
 
-      <!-- BELT 2 -->
-      <div class="belt2-wrapper">
-        <div class="belt" id="belt2">
-          <div class="belt-rollers">
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-          </div>
-          <div class="belt-label">Not Current (7–12 months)</div>
+        <!-- TIMELINE 1 -->
+        <div class="timeline1">
+          <div class="tick" style="left: 0px;">0</div>
+          <div class="tick" style="left: 83px;">1</div>
+          <div class="tick" style="left: 166px;">2</div>
+          <div class="tick" style="left: 249px;">3</div>
+          <div class="tick" style="left: 332px;">4</div>
+          <div class="tick" style="left: 415px;">5</div>
+          <div class="tick" style="left: 498px;">6</div>
         </div>
-      </div>
 
-      <!-- BOXES LAYER -->
-      <div class="boxes-layer" id="boxesLayer"></div>
+        <!-- BELT 1 -->
+        <div class="belt1-wrapper">
+          <div class="belt" id="belt1">
+            <div class="belt-rollers">
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            </div>
+            <div class="belt-label">Current (0–6 months)</div>
+          </div>
+        </div>
 
-      <!-- DUMPSTER -->
-      <div class="dumpster">DUMPSTER</div>
+        <div class="belt-step"></div>
 
-      <!-- IPC BANNER -->
-      <div class="ipc-banner" id="ipcBanner">
-        <div>IPC REQUIRED</div>
-        <div style="font-size:1rem;margin-top:8px;">You are no longer instrument current.</div>
-      </div>
+        <!-- TIMELINE 2 -->
+        <div class="timeline2">
+          <div class="tick" style="left: 83px;">7</div>
+          <div class="tick" style="left: 166px;">8</div>
+          <div class="tick" style="left: 249px;">9</div>
+          <div class="tick" style="left: 332px;">10</div>
+          <div class="tick" style="left: 415px;">11</div>
+          <div class="tick" style="left: 498px;">12</div>
+        </div>
 
-    </div> <!-- end factory-area -->
+        <!-- BELT 2 -->
+        <div class="belt2-wrapper">
+          <div class="belt" id="belt2">
+            <div class="belt-rollers">
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            </div>
+            <div class="belt-label">Not Current (7–12 months)</div>
+          </div>
+        </div>
 
-  </div> <!-- end sim-container -->
-</div> <!-- end panel -->
-<script src="script.js?v=1.1"></script>
+        <!-- BOXES LAYER -->
+        <div class="boxes-layer" id="boxesLayer"></div>
+
+        <!-- DUMPSTER -->
+        <div class="dumpster">DUMPSTER</div>
+
+        <!-- IPC BANNER -->
+        <div class="ipc-banner" id="ipcBanner">
+          <div>IPC REQUIRED</div>
+          <div style="font-size:1rem;margin-top:8px;">You are no longer instrument current.</div>
+        </div>
+
+      </div> <!-- end factory-area -->
+
+    </div> <!-- end sim-container -->
+  </div> <!-- end panel -->
+
+  <!-- Your script goes LAST -->
+  <script src="script.js?v=1.1"></script>
+
 </body>
 </html>
