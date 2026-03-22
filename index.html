@@ -1,39 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>61.57(c) Belt Simulator</title>
+  <meta charset="UTF-8" />
+  <title>Instrument Currency (61.57(c))</title>
   <style>
-    /* ============================
-       PAGE BASE
-    ============================ */
+    /* ============= BASE LAYOUT ============= */
     body {
+      font-family: system-ui, sans-serif;
+      background: #0b1b33;
+      color: #f5f5f5;
       margin: 0;
       padding: 20px;
-      background: #020617;
-      color: #e5e7eb;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    /* ============================
-       SIMULATOR CONTAINER
-    ============================ */
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .panel {
+      background: #122445;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+      width: 100%;
+      max-width: 1100px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.4);
+    }
+
+    .top-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 6px 14px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: #1f6feb;
+      color: #fff;
+    }
+
+    .log-options {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .counter {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0b1730;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .counter button {
+      padding: 2px 8px;
+      font-size: 0.9rem;
+    }
+
+    .counter-value {
+      min-width: 18px;
+      text-align: center;
+      font-weight: 700;
+    }
+
+    /* ============= SIM CONTAINER ============= */
     .sim-container {
       position: relative;
       width: 100%;
-      height: 600px;
-      overflow: visible;
-      border: 1px solid #1f2937;
-      background: #0b1120;
+      max-width: 1100px;
+      height: 400px;
+      margin-top: 10px;
     }
 
-    /* ============================
-       PILOT + THOUGHT BUBBLE
-    ============================ */
+    /* ============= PILOT + THOUGHT BUBBLE ============= */
     .pilot-wrapper {
       position: absolute;
-      top: 60px;
       left: 0;
+      top: 60px;
       width: 200px;
       z-index: 2; /* behind belts */
       display: flex;
@@ -41,11 +96,8 @@
       align-items: center;
     }
 
-    .pilot {
+    .pilot-img {
       width: 160px;
-      /* temp placeholder if no image */
-      background: #1e293b;
-      height: 200px;
     }
 
     .thought-bubble {
@@ -54,68 +106,97 @@
       left: 50%;
       transform: translateX(-50%);
       background: #f9fafb;
-      color: #020617;
+      color: #111827;
       border-radius: 16px;
       padding: 10px 14px;
       max-width: 220px;
       font-size: 0.9rem;
-      z-index: 5; /* above everything */
-      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.6);
+      z-index: 5;
     }
 
-    .thought-bubble ul {
+    .thought-bubble::after {
+      content: "";
+      position: absolute;
+      bottom: -20px;
+      left: 30px;
+      width: 10px;
+      height: 10px;
+      background: #f9fafb;
+      border-radius: 50%;
+    }
+
+    .thought-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .thought-list {
       margin: 0;
-      padding-left: 18px;
+      padding-left: 16px;
     }
 
-    /* ============================
-       FACTORY AREA
-    ============================ */
+    /* ============= FACTORY AREA ============= */
     .factory-area {
+      margin-left: 220px;
+      background: #0a162b;
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
       position: relative;
-      width: 100%;
-      height: 500px;
-      margin-top: 40px;
+      overflow: hidden;
+      min-height: 260px;
     }
 
     .chute {
       position: absolute;
-      top: 80px;
       left: 40px;
+      top: 40px;
       width: 80px;
       height: 80px;
-      border: 2px solid #e5e7eb;
+      background: #1f2937;
+      border-radius: 10px;
+      border: 3px solid #111827;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
-      text-align: center;
+      color: #e5e7eb;
+      font-weight: 700;
+      font-size: 0.8rem;
+      z-index: 3;
     }
 
-    /* ============================
-       BELT APPEARANCE
-    ============================ */
+    /* ============= BELTS ============= */
     .belt {
-      width: 350px;
-      height: 40px;
-      background: #d1d5db;
-      border: 2px solid #9ca3af;
       position: relative;
+      z-index: 3; /* in front of pilot */
+      height: 60px;
+      background: #111827;
+      border-radius: 16px;
+      margin-left: 140px;
+      margin-right: 80px;
       overflow: hidden;
-      z-index: 3; /* belts above pilot */
+      border: 3px solid #020617;
+      box-shadow: 0 4px 0 #020617;
     }
 
     .belt-rollers {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 16px;
+      transform: translateY(-50%);
       display: flex;
-      gap: 6px;
-      padding: 6px;
+      gap: 8px;
+      padding: 0 8px;
     }
 
     .roller {
-      width: 20px;
-      height: 20px;
-      background: #1e293b;
-      border-radius: 50%;
+      flex: 0 0 20px;
+      height: 16px;
+      background: #374151;
+      border-radius: 999px;
+      box-shadow: inset 0 0 4px rgba(0,0,0,0.7);
     }
 
     .belt-label {
@@ -126,28 +207,27 @@
       font-weight: 600;
     }
 
-    /* ============================
-       BELT POSITIONS (STAIRCASE)
-    ============================ */
+    /* wrappers now control staircase positioning */
     .belt1-wrapper {
       position: absolute;
-      top: 150px;
+      top: 120px;
       left: 80px;
       z-index: 3;
+      width: 350px;
     }
 
-    /* Belt 2 starts exactly where Belt 1 ends */
     .belt2-wrapper {
       position: absolute;
-      top: 230px;              /* lower than belt 1 */
-      left: calc(80px + 350px);/* belt1 left + belt1 width */
+      top: 200px;
+      left: calc(80px + 350px); /* starts where belt 1 ends */
       z-index: 3;
+      width: 350px;
     }
 
     .belt-step {
       position: absolute;
       left: calc(80px + 350px - 40px); /* under belt 1 end */
-      top: 190px;
+      top: 160px;
       width: 40px;
       height: 30px;
       background: #020617;
@@ -155,71 +235,173 @@
       z-index: 2;
     }
 
-    /* ============================
-       BOXES LAYER
-    ============================ */
+    /* ============= BOXES + DUMPSTER ============= */
     .boxes-layer {
       position: absolute;
+      left: 140px;
+      right: 80px;
       top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 4; /* boxes above belts */
+      bottom: 0;
       pointer-events: none;
+      z-index: 4;
+    }
+
+    .box {
+      position: absolute;
+      min-width: 80px;
+      padding: 4px 8px;
+      height: 40px;
+      background: #fbbf24;
+      border-radius: 6px;
+      border: 3px solid #92400e;
+      box-shadow: 0 4px 0 #78350f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111827;
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .dumpster {
+      position: absolute;
+      right: 10px;
+      bottom: 20px;
+      width: 80px;
+      height: 60px;
+      background: #14532d;
+      border-radius: 8px 8px 4px 4px;
+      border: 3px solid #022c22;
+      box-shadow: 0 4px 0 #022c22;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      color: #bbf7d0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      padding-bottom: 4px;
+      z-index: 3;
+    }
+
+    .ipc-banner {
+      position: absolute;
+      inset: 0;
+      background: rgba(127,29,29,0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fee2e2;
+      font-weight: 800;
+      font-size: 2rem;
+      text-align: center;
+      z-index: 20;
+      display: none; /* placeholder */
     }
   </style>
 </head>
 <body>
+  <h1>Instrument Currency (61.57(c))</h1>
 
-  <div class="sim-container">
+  <!-- TOP PANEL: CONTROLS / LOGGING -->
+  <div class="panel">
+    <div class="top-controls">
+      <div>
+        <label for="logDate">Log Date:</label>
+        <input type="date" id="logDate" />
+      </div>
 
-    <!-- PILOT + THOUGHT BUBBLE -->
-    <div class="pilot-wrapper">
-      <!-- Replace this div with <img src="pilot.png" class="pilot"> when you have the image -->
-      <div class="pilot"></div>
-      <div class="thought-bubble">
-        <ul id="needs-list">
-          <li>I need 3 approaches</li>
-          <li>I need 1 hold</li>
-          <li>I need 1 intercept</li>
-          <li>I need 1 track</li>
-        </ul>
+      <div class="log-options">
+        <div class="counter">
+          <span>Approaches:</span>
+          <button>-</button>
+          <span class="counter-value">0</span>
+          <button>+</button>
+        </div>
+        <div class="counter">
+          <span>Holds:</span>
+          <button>-</button>
+          <span class="counter-value">0</span>
+          <button>+</button>
+        </div>
+        <div class="counter">
+          <span>Intercept/Track:</span>
+          <button>-</button>
+          <span class="counter-value">0</span>
+          <button>+</button>
+        </div>
+      </div>
+
+      <div>
+        <button id="logBtn">Log</button>
       </div>
     </div>
-
-    <!-- FACTORY -->
-    <div class="factory-area">
-      <div class="chute">CHUTE</div>
-
-      <!-- BELT 1 -->
-      <div class="belt1-wrapper">
-        <div class="belt" id="belt1">
-          <div class="belt-rollers">
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-          </div>
-        </div>
-        <div class="belt-label">Current (0–6 months)</div>
-      </div>
-
-      <!-- STEP BETWEEN BELTS -->
-      <div class="belt-step"></div>
-
-      <!-- BELT 2 -->
-      <div class="belt2-wrapper">
-        <div class="belt" id="belt2">
-          <div class="belt-rollers">
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-          </div>
-        </div>
-        <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
-      </div>
-
-      <div class="boxes-layer" id="boxesLayer"></div>
-    </div>
-
   </div>
 
+  <!-- MAIN SIMULATOR AREA -->
+  <div class="panel">
+    <div class="sim-container">
+
+      <!-- PILOT + THOUGHT BUBBLE -->
+      <div class="pilot-wrapper">
+        <!-- Replace src with your pilot image -->
+        <img src="pilot.png" class="pilot-img" alt="Pilot" />
+        <div class="thought-bubble">
+          <div class="thought-title">To Stay Current:</div>
+          <ul class="thought-list">
+            <li>6 Approaches</li>
+            <li>1 Hold</li>
+            <li>1 Intercept</li>
+            <li>1 Track</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- FACTORY AREA -->
+      <div class="factory-area">
+        <div class="chute">CHUTE</div>
+
+        <!-- BELT 1 -->
+        <div class="belt1-wrapper">
+          <div class="belt" id="belt1">
+            <div class="belt-rollers">
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            </div>
+          </div>
+          <div class="belt-label">Current (0–6 months)</div>
+        </div>
+
+        <!-- STEP BETWEEN BELTS -->
+        <div class="belt-step"></div>
+
+        <!-- BELT 2 -->
+        <div class="belt2-wrapper">
+          <div class="belt" id="belt2">
+            <div class="belt-rollers">
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            </div>
+          </div>
+          <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
+        </div>
+
+        <!-- BOXES LAYER (for future animation) -->
+        <div class="boxes-layer" id="boxesLayer"></div>
+
+        <!-- DUMPSTER -->
+        <div class="dumpster">DUMPSTER</div>
+
+        <!-- IPC BANNER PLACEHOLDER -->
+        <div class="ipc-banner" id="ipcBanner">
+          <div>IPC REQUIRED</div>
+          <div style="font-size:1rem;margin-top:8px;">You are no longer instrument current.</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
