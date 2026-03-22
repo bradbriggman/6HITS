@@ -349,7 +349,7 @@
       font-size: 14px;
       font-weight: 600;
       color: white;
-}
+    }
 
     .timeline1 .tick::after {
       content: "";
@@ -361,6 +361,38 @@
       height: 10px;
       background: white;
     }
+
+    .timeline2 {
+  position: absolute;
+  top: 210px; /* adjust to sit above Belt 2 */
+  left: calc(10px + 500px); /* ⭐ EXACT same left as Belt 2 */
+  width: 500px;
+  height: 30px;
+  display: flex;
+  align-items: flex-end;
+  pointer-events: none;
+  z-index: 9999; /* ⭐ stays above everything */
+}
+
+.timeline2 .tick {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+
+.timeline2 .tick::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 10px;
+  background: white;
+}
     .box {
       position: absolute;
       min-width: 80px;
@@ -521,6 +553,15 @@
         <!-- STEP BETWEEN BELTS -->
         <div class="belt-step"></div>
 
+    <div class="timeline2">
+      <div class="tick" style="left: 0px;">7</div>
+      <div class="tick" style="left: 83px;">8</div>
+      <div class="tick" style="left: 166px;">9</div>
+      <div class="tick" style="left: 249px;">10</div>
+      <div class="tick" style="left: 332px;">11</div>
+      <div class="tick" style="left: 415px;">12</div>
+    </div>
+        
         <!-- BELT 2 -->
         <div class="belt2-wrapper">
           <div class="belt" id="belt2">
