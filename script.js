@@ -146,5 +146,5 @@ function createBox(label) {
       box.hasDropped = true;
     }
 
-  }, 16.67); // 60fps
+  }, 16.67); // <-- THIS is the critical fix
 }
