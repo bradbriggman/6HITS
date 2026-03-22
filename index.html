@@ -1,113 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Instrument Currency (61.57(c))</title>
+  <meta charset="UTF-8">
+  <title>61.57(c) Belt Simulator</title>
   <style>
+    /* ============================
+       PAGE BASE
+    ============================ */
     body {
-      font-family: system-ui, sans-serif;
-      background: #0b1b33;
-      color: #f5f5f5;
       margin: 0;
       padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    h1 {
-      margin-bottom: 10px;
-    }
-
-    .panel {
-      background: #122445;
-      border-radius: 10px;
-      padding: 14px 18px;
-      margin-bottom: 16px;
-      width: 100%;
-      max-width: 1100px;
-      box-shadow: 0 0 12px rgba(0,0,0,0.4);
-    }
-
-    .top-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    button {
-      padding: 6px 14px;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      background: #1f6feb;
-      color: #fff;
-    }
-
-    .log-options {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .counter {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #0b1730;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-
-    .counter button {
-      padding: 2px 8px;
-      font-size: 0.9rem;
-    }
-
-    .counter-value {
-      min-width: 18px;
-      text-align: center;
-      font-weight: 700;
-    }
-
+    /* ============================
+       SIMULATOR CONTAINER
+    ============================ */
     .sim-container {
       position: relative;
       width: 100%;
-      height: 400px;
+      height: 600px;
+      overflow: visible;
+      border: 1px solid #1f2937;
+      background: #0b1120;
     }
 
-    /* PILOT */
+    /* ============================
+       PILOT + THOUGHT BUBBLE
+    ============================ */
     .pilot-wrapper {
       position: absolute;
-      left: 0;
       top: 60px;
+      left: 0;
       width: 200px;
-      z-index: 2; /* pilot now behind belts */
+      z-index: 2; /* behind belts */
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .pilot-img {
+    .pilot {
       width: 160px;
-    }
-
-    .thought-bubble {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #f9fafb;
-      color: #111827;
-      border-radius: 16px;
-      padding: 10px 12px;
-      max-width: 260px;
-      font-size: 0.9rem;
-      z-index: 5;
+      /* temp placeholder if no image */
+      background: #1e293b;
+      height: 200px;
     }
 
     .thought-bubble {
@@ -116,95 +54,68 @@
       left: 50%;
       transform: translateX(-50%);
       background: #f9fafb;
+      color: #020617;
       border-radius: 16px;
       padding: 10px 14px;
-      max-width: 200px;
+      max-width: 220px;
       font-size: 0.9rem;
-      z-index: 5; /* bubble above everything */
+      z-index: 5; /* above everything */
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.6);
     }
 
-    .thought-bubble::after {
-      content: "";
-      position: absolute;
-      bottom: -20px;
-      left: 30px;
-      width: 10px;
-      height: 10px;
-      background: #f9fafb;
-      border-radius: 50%;
-    }
-
-    .thought-title {
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-
-    .thought-list {
+    .thought-bubble ul {
       margin: 0;
-      padding-left: 16px;
+      padding-left: 18px;
     }
 
-    /* FACTORY */
+    /* ============================
+       FACTORY AREA
+    ============================ */
     .factory-area {
-      margin-left: 220px;
-      background: #0a162b;
-      border-radius: 10px;
-      padding: 16px;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
       position: relative;
-      overflow: hidden;
-      min-height: 260px;
+      width: 100%;
+      height: 500px;
+      margin-top: 40px;
     }
 
     .chute {
       position: absolute;
+      top: 80px;
       left: 40px;
-      top: 40px;
       width: 80px;
       height: 80px;
-      background: #1f2937;
-      border-radius: 10px;
-      border: 3px solid #111827;
+      border: 2px solid #e5e7eb;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #e5e7eb;
-      font-weight: 700;
-      font-size: 0.8rem;
-      z-index: 3;
+      font-size: 0.75rem;
+      text-align: center;
     }
 
+    /* ============================
+       BELT APPEARANCE
+    ============================ */
     .belt {
-        position: relative;
-        z-index: 3; /* THIS is what puts the belts in front of the pilot */
-        height: 60px;
-        background: #111827;
-        border-radius: 16px;
-        margin-left: 140px;
-        margin-right: 80px;
-        overflow: hidden;
-        border: 3px solid #020617;
-        box-shadow: 0 4px 0 #020617;
+      width: 350px;
+      height: 40px;
+      background: #d1d5db;
+      border: 2px solid #9ca3af;
+      position: relative;
+      overflow: hidden;
+      z-index: 3; /* belts above pilot */
     }
 
     .belt-rollers {
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 16px;
-      transform: translateY(-50%);
       display: flex;
-      gap: 8px;
-      padding: 0 8px;
+      gap: 6px;
+      padding: 6px;
     }
 
     .roller {
-      flex: 0 0 20px;
-      height: 16px;
-      background: #374151;
-      border-radius: 999px;
-      box-shadow: inset 0 0 4px rgba(0,0,0,0.7);
+      width: 20px;
+      height: 20px;
+      background: #1e293b;
+      border-radius: 50%;
     }
 
     .belt-label {
@@ -215,20 +126,28 @@
       font-weight: 600;
     }
 
+    /* ============================
+       BELT POSITIONS (STAIRCASE)
+    ============================ */
     .belt1-wrapper {
-        position: relative;
-        z-index: 3; /* forces belt 1 ABOVE pilot */
+      position: absolute;
+      top: 150px;
+      left: 80px;
+      z-index: 3;
     }
 
+    /* Belt 2 starts exactly where Belt 1 ends */
     .belt2-wrapper {
-        position: relative;
-        z-index: 3; /* forces belt 2 ABOVE pilot */
+      position: absolute;
+      top: 230px;              /* lower than belt 1 */
+      left: calc(80px + 350px);/* belt1 left + belt1 width */
+      z-index: 3;
     }
 
     .belt-step {
       position: absolute;
-      left: 140px;
-      top: 150px;
+      left: calc(80px + 350px - 40px); /* under belt 1 end */
+      top: 190px;
       width: 40px;
       height: 30px;
       background: #020617;
@@ -236,380 +155,71 @@
       z-index: 2;
     }
 
+    /* ============================
+       BOXES LAYER
+    ============================ */
     .boxes-layer {
       position: absolute;
-      left: 140px;
-      right: 80px;
       top: 0;
-      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 4; /* boxes above belts */
       pointer-events: none;
-      z-index: 4;
-    }
-
-    .box {
-      position: absolute;
-      min-width: 80px;
-      padding: 4px 8px;
-      height: 40px;
-      background: #fbbf24;
-      border-radius: 6px;
-      border: 3px solid #92400e;
-      box-shadow: 0 4px 0 #78350f;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #111827;
-      font-weight: 700;
-      font-size: 0.8rem;
-      text-align: center;
-      white-space: nowrap;
-    }
-
-    .dumpster {
-      position: absolute;
-      right: 10px;
-      bottom: 20px;
-      width: 80px;
-      height: 60px;
-      background: #14532d;
-      border-radius: 8px 8px 4px 4px;
-      border: 3px solid #022c22;
-      box-shadow: 0 4px 0 #022c22;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      color: #bbf7d0;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-align: center;
-      padding-bottom: 4px;
-      z-index: 3;
-    }
-
-    .ipc-banner {
-      position: absolute;
-      inset: 0;
-      background: rgba(127,29,29,0.9);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #fee2e2;
-      font-weight: 800;
-      font-size: 2rem;
-      text-align: center;
-      z-index: 20;
     }
   </style>
 </head>
 <body>
-  <h1>Instrument Currency (61.57(c))</h1>
-
-  <div class="panel">
-    <div class="top-controls">
-      <button id="beginBtn">Begin</button>
-
-      <div class="log-options">
-        <div class="counter">
-          <span>Approaches:</span>
-          <button id="approachMinusBtn">-</button>
-          <span class="counter-value" id="approachCount">0</span>
-          <button id="approachPlusBtn">+</button>
-        </div>
-
-        <label><input type="checkbox" name="item" value="Hold" /> Hold</label>
-        <label><input type="checkbox" name="item" value="Intercept" /> Intercept</label>
-        <label><input type="checkbox" name="item" value="Track" /> Track</label>
-
-        <button id="logBtn">Log</button>
-      </div>
-    </div>
-  </div>
 
   <div class="sim-container">
+
     <!-- PILOT + THOUGHT BUBBLE -->
-  <div class="pilot-wrapper">
-    <img src="pilot.png" class="pilot">
-    <div class="thought-bubble">
-      <ul id="needs-list">
-        <li>I need 3 approaches</li>
-        <li>I need 1 hold</li>
-        <li>I need 1 intercept</li>
-        <li>I need 1 track</li>
-      </ul>
+    <div class="pilot-wrapper">
+      <!-- Replace this div with <img src="pilot.png" class="pilot"> when you have the image -->
+      <div class="pilot"></div>
+      <div class="thought-bubble">
+        <ul id="needs-list">
+          <li>I need 3 approaches</li>
+          <li>I need 1 hold</li>
+          <li>I need 1 intercept</li>
+          <li>I need 1 track</li>
+        </ul>
+      </div>
     </div>
-  </div>
 
     <!-- FACTORY -->
     <div class="factory-area">
       <div class="chute">CHUTE</div>
 
-    <div class="belt1-wrapper">
-    <div class="belt" id="belt1">
-      <div class="belt-rollers">
-        <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-        <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+      <!-- BELT 1 -->
+      <div class="belt1-wrapper">
+        <div class="belt" id="belt1">
+          <div class="belt-rollers">
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+          </div>
+        </div>
+        <div class="belt-label">Current (0–6 months)</div>
       </div>
-    </div>
-    <div class="belt-label">Current (0–6 months)</div>
-  </div>
 
+      <!-- STEP BETWEEN BELTS -->
       <div class="belt-step"></div>
 
-     <div class="belt2-wrapper">
-    <div class="belt" id="belt2">
-      <div class="belt-rollers">
-        <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-        <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+      <!-- BELT 2 -->
+      <div class="belt2-wrapper">
+        <div class="belt" id="belt2">
+          <div class="belt-rollers">
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+          </div>
+        </div>
+        <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
       </div>
-    </div>
-    <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
-  </div>
 
       <div class="boxes-layer" id="boxesLayer"></div>
-
-      <div class="dumpster">DUMPSTER</div>
-
-      <div class="ipc-banner" id="ipcBanner" style="display:none;">
-        <div>IPC REQUIRED</div>
-        <button id="resetBtn">Reset</button>
-      </div>
     </div>
+
   </div>
 
-  <script>
-    const MONTH_PIXELS = 50;
-    const BELT1_END = 6;
-    const BELT2_END = 12;
-    const SPEED = 1/3;
-
-    let simStarted = false;
-    let beltsRunning = false;
-    let lastTime = null;
-    let ipc = false;
-
-    let needs = {
-      Approach: 6,
-      Hold: 1,
-      Intercept: 1,
-      Track: 1
-    };
-
-    let boxes = [];
-
-    const beginBtn = document.getElementById("beginBtn");
-    const logBtn = document.getElementById("logBtn");
-    const resetBtn = document.getElementById("resetBtn");
-    const thoughtList = document.getElementById("thoughtList");
-    const boxesLayer = document.getElementById("boxesLayer");
-    const ipcBanner = document.getElementById("ipcBanner");
-
-    const holdCb = document.querySelector("input[value='Hold']");
-    const interceptCb = document.querySelector("input[value='Intercept']");
-    const trackCb = document.querySelector("input[value='Track']");
-
-    const approachMinusBtn = document.getElementById("approachMinusBtn");
-    const approachPlusBtn = document.getElementById("approachPlusBtn");
-    const approachCountSpan = document.getElementById("approachCount");
-
-    let approachCount = 0;
-
-    function updateThought() {
-      thoughtList.innerHTML = "";
-
-      const items = [];
-      if (needs.Approach > 0) items.push(`I need ${needs.Approach} approach${needs.Approach>1?"es":""}`);
-      if (needs.Hold > 0) items.push("I need 1 hold");
-      if (needs.Intercept > 0) items.push("I need 1 intercept");
-      if (needs.Track > 0) items.push("I need 1 track");
-
-      if (items.length === 0) {
-        const li = document.createElement("li");
-        li.textContent = "I am current";
-        thoughtList.appendChild(li);
-      } else {
-        items.forEach(t => {
-          const li = document.createElement("li");
-          li.textContent = t;
-          thoughtList.appendChild(li);
-        });
-      }
-    }
-
-    function updateApproachDisplay() {
-      approachCountSpan.textContent = approachCount;
-    }
-
-    approachMinusBtn.addEventListener("click", () => {
-      if (approachCount > 0) {
-        approachCount--;
-        updateApproachDisplay();
-      }
-    });
-
-    approachPlusBtn.addEventListener("click", () => {
-      if (approachCount < 6) {
-        approachCount++;
-        updateApproachDisplay();
-      }
-    });
-
-    function createCombinedBox(label) {
-      const id = "box-" + Math.random().toString(16).slice(2);
-      const div = document.createElement("div");
-      div.className = "box";
-      div.id = id;
-      div.style.left = "0px";
-      div.style.top = "40px"; // belt 1 height
-
-      div.textContent = label;
-
-      boxesLayer.appendChild(div);
-
-      boxes.push({
-        id,
-        label,
-        month: 0,
-        active: true
-      });
-    }
-
-    function startBelts() {
-      if (!beltsRunning && boxes.length > 0 && simStarted && !ipc) {
-        beltsRunning = true;
-        lastTime = null;
-        requestAnimationFrame(tick);
-      }
-    }
-
-    function stopBelts() {
-      beltsRunning = false;
-      lastTime = null;
-    }
-
-    function triggerIPC() {
-      ipc = true;
-      stopBelts();
-      ipcBanner.style.display = "flex";
-    }
-
-    function resetSim() {
-      ipc = false;
-      simStarted = false;
-      stopBelts();
-      boxes.forEach(b => {
-        const el = document.getElementById(b.id);
-        if (el) el.remove();
-      });
-      boxes = [];
-      needs = { Approach: 6, Hold: 1, Intercept: 1, Track: 1 };
-      approachCount = 0;
-      updateApproachDisplay();
-      holdCb.checked = false;
-      interceptCb.checked = false;
-      trackCb.checked = false;
-      updateThought();
-      ipcBanner.style.display = "none";
-    }
-
-    function updateBoxes(dt) {
-      const dm = dt * SPEED;
-
-      for (const box of boxes) {
-        if (!box.active) continue;
-
-        box.month += dm;
-
-        const el = document.getElementById(box.id);
-        if (!el) continue;
-
-        if (box.month <= BELT1_END) {
-          el.style.top = "40px";
-        } else if (box.month <= BELT2_END) {
-          el.style.top = "140px";
-        } else {
-          box.active = false;
-          el.remove();
-          if (!ipc) triggerIPC();
-          continue;
-        }
-
-        el.style.left = (box.month * MONTH_PIXELS) + "px";
-      }
-
-      boxes = boxes.filter(b => b.active);
-      if (boxes.length === 0) stopBelts();
-    }
-
-    function tick(t) {
-      if (!beltsRunning || ipc) return;
-
-      if (lastTime == null) {
-        lastTime = t;
-        requestAnimationFrame(tick);
-        return;
-      }
-
-      const dt = (t - lastTime) / 1000;
-      lastTime = t;
-
-      updateBoxes(dt);
-      requestAnimationFrame(tick);
-    }
-
-    beginBtn.addEventListener("click", () => {
-      simStarted = true;
-      startBelts();
-    });
-
-    logBtn.addEventListener("click", () => {
-      if (!simStarted || ipc) return;
-
-      const a = approachCount;
-      const h = holdCb.checked ? 1 : 0;
-      const i = interceptCb.checked ? 1 : 0;
-      const t = trackCb.checked ? 1 : 0;
-
-      if (a === 0 && h === 0 && i === 0 && t === 0) {
-        alert("Log at least one item.");
-        return;
-      }
-
-      // Update needs
-      if (a > 0) {
-        const used = Math.min(a, needs.Approach);
-        needs.Approach -= used;
-      }
-      if (h === 1 && needs.Hold > 0) needs.Hold--;
-      if (i === 1 && needs.Intercept > 0) needs.Intercept--;
-      if (t === 1 && needs.Track > 0) needs.Track--;
-
-      // Build label (Option A style)
-      const parts = [];
-      if (a > 0) parts.push(`${a}A`);
-      if (h > 0) parts.push(`1H`);
-      if (i > 0) parts.push(`1I`);
-      if (t > 0) parts.push(`1T`);
-
-      const label = parts.join(" ");
-
-      createCombinedBox(label);
-      updateThought();
-
-      // Reset batch inputs
-      approachCount = 0;
-      updateApproachDisplay();
-      holdCb.checked = false;
-      interceptCb.checked = false;
-      trackCb.checked = false;
-
-      startBelts();
-    });
-
-    resetBtn.addEventListener("click", resetSim);
-
-    updateThought();
-    updateApproachDisplay();
-  </script>
 </body>
 </html>
