@@ -415,6 +415,7 @@
       font-size: 0.8rem;
       text-align: center;
       white-space: nowrap;
+      z-index: 10;
     }
 
     .dumpster {
