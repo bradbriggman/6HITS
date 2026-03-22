@@ -9,6 +9,7 @@
     .academy-logo {
       width: 40px;   /* adjust size as needed */
       height: auto;
+      max-width: 100%;
     }
     /* ============= BASE LAYOUT ============= */
     body {
