@@ -288,7 +288,17 @@
       color: #e5e7eb;
       font-weight: 600;
     }
-
+    
+    <div class="timeline1">
+      <div class="tick" style="left: 0px;">0</div>
+      <div class="tick" style="left: 83px;">1</div>
+      <div class="tick" style="left: 166px;">2</div>
+      <div class="tick" style="left: 249px;">3</div>
+      <div class="tick" style="left: 332px;">4</div>
+      <div class="tick" style="left: 415px;">5</div>
+      <div class="tick" style="left: 498px;">6</div>
+    </div>
+    
     /* BELT 1 — now positioned precisely */
      .belt1-wrapper {
        position: absolute;
@@ -384,6 +394,38 @@
       z-index: 20;
       display: none; /* placeholder */
     }
+
+        .timeline1 {
+      position: absolute;
+      top: 120px;        /* adjust to sit above Belt 1 */
+      left: 10px;        /* EXACT same left as Belt 1 */
+      width: 500px;      /* EXACT same width as Belt 1 */
+      height: 30px;
+      display: flex;
+      align-items: flex-end;
+      pointer-events: none; /* user can't click it */
+    }
+
+    .timeline1 .tick {
+      position: absolute;
+      bottom: 0;
+      transform: translateX(-50%);
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+    }
+
+    .timeline1 .tick::after { 
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 10px;
+      background: white;
+    }
+    
   </style>
 </head>
 <body>
