@@ -77,17 +77,16 @@
     .sim-container {
       position: relative;
       width: 100%;
-      max-width: 1100px;
-      margin-top: 20px;
+      height: 400px;
     }
 
     /* PILOT */
     .pilot-wrapper {
       position: absolute;
       left: 0;
-      top: 40px;
+      top: 60px;
       width: 200px;
-      z-index: 0; /* pilot now behind belts */
+      z-index: 2; /* pilot now behind belts */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -95,8 +94,6 @@
 
     .pilot-img {
       width: 160px;
-      height: auto;
-      margin-top: 40px;
     }
 
     .thought-bubble {
@@ -113,15 +110,17 @@
       z-index: 5;
     }
 
-    .thought-bubble::before {
-      content: "";
+    .thought-bubble {
       position: absolute;
-      bottom: -10px;
-      left: 40px;
-      width: 16px;
-      height: 16px;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
       background: #f9fafb;
-      border-radius: 50%;
+      border-radius: 16px;
+      padding: 10px 14px;
+      max-width: 200px;
+      font-size: 0.9rem;
+      z-index: 5; /* bubble above everything */
     }
 
     .thought-bubble::after {
@@ -328,47 +327,44 @@
   </div>
 
   <div class="sim-container">
-    <!-- PILOT -->
-    <div class="pilot-wrapper">
-      <div class="thought-bubble" id="thoughtBubble">
-        <div class="thought-title">Instrument Currency</div>
-        <ul class="thought-list" id="thoughtList">
-          <li>I need 6 approaches</li>
-          <li>I need 1 hold</li>
-          <li>I need 1 intercept</li>
-          <li>I need 1 track</li>
-        </ul>
-      </div>
-      <img src="pilot.png" class="pilot-img" />
+    <!-- PILOT + THOUGHT BUBBLE -->
+  <div class="pilot-wrapper">
+    <img src="pilot.png" class="pilot">
+    <div class="thought-bubble">
+      <ul id="needs-list">
+        <li>I need 3 approaches</li>
+        <li>I need 1 hold</li>
+        <li>I need 1 intercept</li>
+        <li>I need 1 track</li>
+      </ul>
     </div>
+  </div>
 
     <!-- FACTORY -->
     <div class="factory-area">
       <div class="chute">CHUTE</div>
 
-      <div class="belt1-wrapper">
-        <div class="belt" id="belt1">
-          <div class="belt-rollers">
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-          </div>
-        </div>
-        <div class="belt-label">Current (0–6 months)</div>
+    <div class="belt1-wrapper">
+    <div class="belt" id="belt1">
+      <div class="belt-rollers">
+        <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+        <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
       </div>
+    </div>
+    <div class="belt-label">Current (0–6 months)</div>
+  </div>
 
       <div class="belt-step"></div>
 
-      <div class="belt2-wrapper">
-        <div class="belt" id="belt2">
-          <div class="belt-rollers">
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            <div class="roller"></div><div class="roller"></div><div class="roller"></div>
-          </div>
-        </div>
-        <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
+     <div class="belt2-wrapper">
+    <div class="belt" id="belt2">
+      <div class="belt-rollers">
+        <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+        <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
       </div>
+    </div>
+    <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
+  </div>
 
       <div class="boxes-layer" id="boxesLayer"></div>
 
