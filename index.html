@@ -328,7 +328,37 @@
       pointer-events: none;
       z-index: 4;
     }
+    
+    .timeline1 {
+      position: absolute;
+      top: 120px;        /* adjust to sit above Belt 1 */
+      left: 10px;        /* EXACT same left as Belt 1 */
+      width: 500px;      /* EXACT same width as Belt 1 */
+      height: 30px;
+      display: flex;
+      align-items: flex-end;
+      pointer-events: none; /* user can't click it */
+    }
 
+    .timeline1 .tick {
+      position: absolute;
+      bottom: 0;
+      transform: translateX(-50%);
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+}
+
+    .timeline1 .tick::after {
+      content: "";
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 10px;
+      background: white;
+    }
     .box {
       position: absolute;
       min-width: 80px;
