@@ -127,36 +127,24 @@ function createBox(label) {
   layer.appendChild(box);
 
   // Starting position on Belt 1
-  let x = 0;
-  let y = 120;
+  box.style.left = "0px";
+  box.style.top = "120px";
 
-  box.style.left = x + "px";
-  box.style.top = y + "px";
+  const pixelsPerFrame = 0.27777; // 16.6666px/sec at 60fps
 
-  let months = 0;
-
-  const pixelsPerFrame = 0.27777;
-
-const interval = setInterval(() => {
+  const interval = setInterval(() => {
     if (isPaused) return;
 
-    months++;
-
     // Smooth movement at 16.6666px/sec
-    box.style.left = (parseFloat(box.style.left) || 0) + pixelsPerFrame + "px";
+    let currentLeft = parseFloat(box.style.left) || 0;
+    let newLeft = currentLeft + pixelsPerFrame;
+    box.style.left = newLeft + "px";
 
-    if (months === 6) {
-        y += 500;
-        box.style.top = y + "px";
-    }
-});
-
-    // Dumpster at 12 months
-    if (months === 12) {
-      y += 1000;
-      box.style.top = y + "px";
-      clearInterval(interval);
+    // Drop to Belt 2 when passing 6-month mark (300px)
+    if (!box.hasDropped && newLeft >= 300) {
+      box.style.top = "500px"; // adjust if needed
+      box.hasDropped = true;
     }
 
-  }, 3000);
+  }, 16.67); // 60fps
 }
