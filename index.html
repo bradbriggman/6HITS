@@ -3,7 +3,155 @@
 <head>
   <meta charset="UTF-8" />
   <title>Instrument Currency (61.57(c))</title>
-  <style>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+ <h1>Instrument Currency (61.57(c))</h1>
+
+<!-- TOP PANEL: CONTROLS / LOGGING -->
+<div class="top-bar">
+
+  <!-- BEGIN BUTTON -->
+  <button id="beginBtn" class="begin-btn">Begin</button>
+
+  <!-- LOGGING OPTIONS -->
+  <div class="log-section">
+
+    <div class="log-item">
+      <span class="log-label">Approach</span>
+      <div class="counter">
+        <button class="minus" data-type="approach">-</button>
+        <span class="counter-value" id="approachCount">0</span>
+        <button class="plus" data-type="approach">+</button>
+      </div>
+    </div>
+
+    <div class="log-item">
+      <span class="log-label">Hold</span>
+      <div class="counter">
+        <button class="minus" data-type="hold">-</button>
+        <span class="counter-value" id="holdCount">0</span>
+        <button class="plus" data-type="hold">+</button>
+      </div>
+    </div>
+
+    <div class="log-item">
+      <span class="log-label">Intercept</span>
+      <div class="counter">
+        <button class="minus" data-type="intercept">-</button>
+        <span class="counter-value" id="interceptCount">0</span>
+        <button class="plus" data-type="intercept">+</button>
+      </div>
+    </div>
+
+    <div class="log-item">
+      <span class="log-label">Track</span>
+      <div class="counter">
+        <button class="minus" data-type="track">-</button>
+        <span class="counter-value" id="trackCount">0</span>
+        <button class="plus" data-type="track">+</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LOG + PAUSE BUTTONS -->
+  <button id="logBtn" class="log-btn">Log</button>
+  <button id="pauseBtn">Pause</button>
+
+</div>
+
+
+<!-- MAIN SIMULATOR AREA -->
+<div class="panel">
+  <div class="sim-container">
+
+    <!-- PILOT + THOUGHT BUBBLE -->
+    <div class="pilot-wrapper">
+      <img src="pilot.png" class="pilot-img" alt="Pilot" />
+      <div class="thought-bubble">
+        <div class="thought-title">To Stay Current:</div>
+        <ul class="thought-list">
+          <li>6 Approaches</li>
+          <li>1 Hold</li>
+          <li>1 Intercept</li>
+          <li>1 Track</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- FACTORY AREA -->
+    <div class="factory-area">
+
+      <div class="chute">CHUTE</div>
+
+      <!-- TIMELINE 1 -->
+      <div class="timeline1">
+        <div class="tick" style="left: 0px;">0</div>
+        <div class="tick" style="left: 83px;">1</div>
+        <div class="tick" style="left: 166px;">2</div>
+        <div class="tick" style="left: 249px;">3</div>
+        <div class="tick" style="left: 332px;">4</div>
+        <div class="tick" style="left: 415px;">5</div>
+        <div class="tick" style="left: 498px;">6</div>
+      </div>
+
+      <!-- BELT 1 -->
+      <div class="belt1-wrapper">
+        <div class="belt" id="belt1">
+          <div class="belt-rollers">
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+          </div>
+          <div class="belt-label">Current (0–6 months)</div>
+        </div>
+      </div>
+
+      <div class="belt-step"></div>
+
+      <!-- TIMELINE 2 -->
+      <div class="timeline2">
+        <div class="tick" style="left: 83px;">7</div>
+        <div class="tick" style="left: 166px;">8</div>
+        <div class="tick" style="left: 249px;">9</div>
+        <div class="tick" style="left: 332px;">10</div>
+        <div class="tick" style="left: 415px;">11</div>
+        <div class="tick" style="left: 498px;">12</div>
+      </div>
+
+      <!-- BELT 2 -->
+      <div class="belt2-wrapper">
+        <div class="belt" id="belt2">
+          <div class="belt-rollers">
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+            <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+          </div>
+          <div class="belt-label">Not Current (7–12 months)</div>
+        </div>
+      </div>
+
+      <!-- BOXES LAYER -->
+      <div class="boxes-layer" id="boxesLayer"></div>
+
+      <!-- DUMPSTER -->
+      <div class="dumpster">DUMPSTER</div>
+
+      <!-- IPC BANNER -->
+      <div class="ipc-banner" id="ipcBanner">
+        <div>IPC REQUIRED</div>
+        <div style="font-size:1rem;margin-top:8px;">You are no longer instrument current.</div>
+      </div>
+
+    </div> <!-- end factory-area -->
+
+  </div> <!-- end sim-container -->
+</div> <!-- end panel -->
+<script src="script.js"></script>
+</body>
+</html>
+
+<style>
     /* ============= BASE LAYOUT ============= */
     body {
       font-family: system-ui, sans-serif;
@@ -165,9 +313,7 @@
       border: none;
       cursor: pointer;
       font-size: 1.1rem;
-    }
-
-    /* ============= PILOT + THOUGHT BUBBLE ============= */
+ /* ============= PILOT + THOUGHT BUBBLE ============= */
     .pilot-wrapper {
       position: absolute;
       top: -10px;
@@ -448,154 +594,14 @@
       z-index: 20;
       display: none; /* placeholder */
     }
-    
-  </style>
-</head>
-<body>
-  <h1>Instrument Currency (61.57(c))</h1>
 
-  <!-- TOP PANEL: CONTROLS / LOGGING -->
-  <div class="top-bar">
+  <script>
+/* ============================================================
+   GLOBAL STATE
+============================================================ */
+let isPaused = false;          // Pause flag
+let beltsMoving = false;       // Prevent double-start
 
-    <!-- BEGIN BUTTON -->
-    <button id="beginBtn" class="begin-btn">Begin</button>
-
-    <!-- LOGGING OPTIONS -->
-    <div class="log-section">
-
-        <div class="log-item">
-            <span class="log-label">Approach</span>
-            <div class="counter">
-                <button class="minus" data-type="approach">-</button>
-                <span class="counter-value" id="approachCount">0</span>
-                <button class="plus" data-type="approach">+</button>
-            </div>
-        </div>
-
-        <div class="log-item">
-            <span class="log-label">Hold</span>
-            <div class="counter">
-                <button class="minus" data-type="hold">-</button>
-                <span class="counter-value" id="holdCount">0</span>
-                <button class="plus" data-type="hold">+</button>
-            </div>
-        </div>
-
-        <div class="log-item">
-            <span class="log-label">Intercept</span>
-            <div class="counter">
-                <button class="minus" data-type="intercept">-</button>
-                <span class="counter-value" id="interceptCount">0</span>
-                <button class="plus" data-type="intercept">+</button>
-            </div>
-        </div>
-
-        <div class="log-item">
-            <span class="log-label">Track</span>
-            <div class="counter">
-                <button class="minus" data-type="track">-</button>
-                <span class="counter-value" id="trackCount">0</span>
-                <button class="plus" data-type="track">+</button>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- LOG BUTTON -->
-    <button id="logBtn" class="log-btn">Log</button>
-    <button id="pauseBtn">Pause</button>
-
-</div>
-
-  <!-- MAIN SIMULATOR AREA -->
-  <div class="panel">
-    <div class="sim-container">
-
-      <!-- PILOT + THOUGHT BUBBLE -->
-      <div class="pilot-wrapper">
-        <!-- Replace src with your pilot image -->
-        <img src="pilot.png" class="pilot-img" alt="Pilot" />
-        <div class="thought-bubble">
-          <div class="thought-title">To Stay Current:</div>
-          <ul class="thought-list">
-            <li>6 Approaches</li>
-            <li>1 Hold</li>
-            <li>1 Intercept</li>
-            <li>1 Track</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- FACTORY AREA -->
-      <div class="factory-area">
-        <div class="chute">CHUTE</div>
-
-    <div class="timeline1">
-      <div class="tick" style="left: 0px;">0</div>
-      <div class="tick" style="left: 83px;">1</div>
-      <div class="tick" style="left: 166px;">2</div>
-      <div class="tick" style="left: 249px;">3</div>
-      <div class="tick" style="left: 332px;">4</div>
-      <div class="tick" style="left: 415px;">5</div>
-      <div class="tick" style="left: 498px;">6</div>
-    </div>
-        
-        <!-- BELT 1 -->
-        <div class="belt1-wrapper">
-          <div class="belt" id="belt1">
-            <div class="belt-rollers">
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            </div>
-          <div class="belt-label">Current (0–6 months)</div>
-          </div>
-        </div>
-
-        <!-- STEP BETWEEN BELTS -->
-        <div class="belt-step"></div>
-
-    <div class="timeline2">
-      <div class="tick" style="left: 83px;">7</div>
-      <div class="tick" style="left: 166px;">8</div>
-      <div class="tick" style="left: 249px;">9</div>
-      <div class="tick" style="left: 332px;">10</div>
-      <div class="tick" style="left: 415px;">11</div>
-      <div class="tick" style="left: 498px;">12</div>
-    </div>
-        
-        <!-- BELT 2 -->
-        <div class="belt2-wrapper">
-          <div class="belt" id="belt2">
-            <div class="belt-rollers">
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            </div>
-              <div class="belt-label">Not Current, but there is still time (7–12 months)</div>
-          </div>
-        </div>
-
-        <!-- BOXES LAYER (for future animation) -->
-        <div class="boxes-layer" id="boxesLayer"></div>
-
-        <!-- DUMPSTER -->
-        <div class="dumpster">DUMPSTER</div>
-
-        <!-- IPC BANNER PLACEHOLDER -->
-        <div class="ipc-banner" id="ipcBanner">
-          <div>IPC REQUIRED</div>
-          <div style="font-size:1rem;margin-top:8px;">You are no longer instrument current.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</body>
-</html>
-
-<script>
-  let isPaused = false;   // ⭐ Global pause flag
-/* ============================
-   COUNTER LOGIC
-============================ */
 const counters = {
   approach: 0,
   hold: 0,
@@ -603,19 +609,26 @@ const counters = {
   track: 0
 };
 
+
+/* ============================================================
+   PAUSE BUTTON — SINGLE CLEAN LISTENER
+============================================================ */
 document.getElementById("pauseBtn").addEventListener("click", () => {
-    isPaused = !isPaused;
-    document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+  isPaused = !isPaused;
 
-    document.querySelectorAll('.belt').forEach(belt => {
-        belt.classList.toggle('paused', isPaused);
-    });
+  // Update button text
+  document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+
+  // Freeze/unfreeze belts
+  document.querySelectorAll(".belt-rollers").forEach(rollers => {
+    rollers.style.animationPlayState = isPaused ? "paused" : "running";
+  });
 });
 
-// Toggle button text
-document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
-});
 
+/* ============================================================
+   COUNTER BUTTONS (+ / -)
+============================================================ */
 document.querySelectorAll(".plus").forEach(btn => {
   btn.addEventListener("click", () => {
     const type = btn.dataset.type;
@@ -632,11 +645,10 @@ document.querySelectorAll(".minus").forEach(btn => {
   });
 });
 
-/* ============================
-   BELT MOVEMENT (BEGIN BUTTON)
-============================ */
-let beltsMoving = false;
 
+/* ============================================================
+   BEGIN BUTTON — START BELT MOVEMENT
+============================================================ */
 document.getElementById("beginBtn").addEventListener("click", () => {
   if (beltsMoving) return;
   beltsMoving = true;
@@ -645,32 +657,11 @@ document.getElementById("beginBtn").addEventListener("click", () => {
     rollers.style.animation = "roll 0.3s linear infinite";
   });
 });
-  
-  document.getElementById("pauseBtn").addEventListener("click", () => {
-    isPaused = !isPaused;
 
-    // Change button text
-    document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
 
-    // Freeze or unfreeze belts
-    document.querySelectorAll(".belt-rollers").forEach(rollers => {
-        rollers.style.animationPlayState = isPaused ? "paused" : "running";
-    });
-});
-  
-document.getElementById("pauseBtn").addEventListener("click", () => {
-    isPaused = !isPaused;
-
-    // Change button text
-    document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
-
-    // ⭐ Freeze or unfreeze belts
-    document.querySelectorAll(".belt-rollers").forEach(rollers => {
-        rollers.style.animationPlayState = isPaused ? "paused" : "running";
-    });
-}); 
-  
-/* Roller animation */
+/* ============================================================
+   ROLLER ANIMATION KEYFRAMES
+============================================================ */
 const style = document.createElement("style");
 style.innerHTML = `
 @keyframes roll {
@@ -679,19 +670,22 @@ style.innerHTML = `
 }`;
 document.head.appendChild(style);
 
-/* ============================
+
+/* ============================================================
    LOG BUTTON → CREATE BOX
-============================ */
+============================================================ */
 document.getElementById("logBtn").addEventListener("click", () => {
   const label = buildLabel();
   if (!label) return;
 
   createBox(label);
-
   resetCounters();
 });
 
-/* Build label text from counters */
+
+/* ============================================================
+   BUILD LABEL FROM COUNTERS
+============================================================ */
 function buildLabel() {
   let parts = [];
 
@@ -703,7 +697,10 @@ function buildLabel() {
   return parts.join(" ");
 }
 
-/* Reset counters after logging */
+
+/* ============================================================
+   RESET COUNTERS
+============================================================ */
 function resetCounters() {
   for (let key in counters) counters[key] = 0;
 
@@ -713,9 +710,10 @@ function resetCounters() {
   document.getElementById("trackCount").textContent = 0;
 }
 
-/* ============================
+
+/* ============================================================
    CREATE + MOVE BOX
-============================ */
+============================================================ */
 function createBox(label) {
   const box = document.createElement("div");
   box.className = "box";
@@ -726,19 +724,18 @@ function createBox(label) {
 
   // Starting position on Belt 1
   let x = 0;
-  let y = 120; // adjust if needed
+  let y = 120;
 
   box.style.left = x + "px";
   box.style.top = y + "px";
 
-  // Move 16.666px every second
   let months = 0;
 
   const interval = setInterval(() => {
     if (isPaused) return;
+
     months++;
     x += 60; // move right
-
     box.style.left = x + "px";
 
     // Drop to Belt 2 at 6 months
@@ -756,4 +753,3 @@ function createBox(label) {
 
   }, 3000);
 }
-</script>
