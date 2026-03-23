@@ -5,105 +5,116 @@
   <title>Instrument Currency (61.57(c))</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <!-- HEADER -->
   <header class="top-bar">
     <div class="logo-title">
-      <!-- Replace src with your actual logo file -->
-      <img src="us-aviation-logo.png" alt="US Aviation Logo" class="logo">
+      <img src="assets/us-aviation-logo.png" alt="US Aviation Logo" class="logo">
       <h1>Instrument Currency (61.57(c))</h1>
     </div>
     <button id="beginButton" class="primary-btn">Begin</button>
   </header>
 
-  <main class="sim-container">
-    <section class="controls-panel">
-      <div class="counter-row">
-  <span>Approach</span>
-  <button class="minus" data-type="Approach">–</button>
-  <span id="count-Approach">0</span>
-  <button class="plus" data-type="Approach">+</button>
-    </div>
+  <!-- SIMULATOR WRAPPER -->
+  <div class="sim-wrapper">
+    <main class="sim-container">
 
-<div class="counter-row">
-  <span>Hold</span>
-  <button class="minus" data-type="Hold">–</button>
-  <span id="count-Hold">0</span>
-  <button class="plus" data-type="Hold">+</button>
-</div>
+      <!-- CONTROLS PANEL -->
+      <section class="controls-panel">
 
-<div class="counter-row">
-  <span>Intercept</span>
-  <button class="minus" data-type="Intercept">–</button>
-  <span id="count-Intercept">0</span>
-  <button class="plus" data-type="Intercept">+</button>
-</div>
+        <div class="counter-row">
+          <span>Approach</span>
+          <button class="minus" data-type="Approach" aria-label="Decrease Approach count">–</button>
+          <span id="count-Approach">0</span>
+          <button class="plus" data-type="Approach" aria-label="Increase Approach count">+</button>
+        </div>
 
-<div class="counter-row">
-  <span>Track</span>
-  <button class="minus" data-type="Track">–</button>
-  <span id="count-Track">0</span>
-  <button class="plus" data-type="Track">+</button>
-</div>
+        <div class="counter-row">
+          <span>Hold</span>
+          <button class="minus" data-type="Hold" aria-label="Decrease Hold count">–</button>
+          <span id="count-Hold">0</span>
+          <button class="plus" data-type="Hold" aria-label="Increase Hold count">+</button>
+        </div>
 
-<button id="logButton" class="secondary-btn">Log</button>
-    </section>
+        <div class="counter-row">
+          <span>Intercept</span>
+          <button class="minus" data-type="Intercept" aria-label="Decrease Intercept count">–</button>
+          <span id="count-Intercept">0</span>
+          <button class="plus" data-type="Intercept" aria-label="Increase Intercept count">+</button>
+        </div>
 
-    <section class="factory-scene">
-      <div class="pilot-area">
-        <!-- Replace src with your actual pilot PNG -->
-        <img src="pilot.png" alt="Pilot" class="pilot-img">
+        <div class="counter-row">
+          <span>Track</span>
+          <button class="minus" data-type="Track" aria-label="Decrease Track count">–</button>
+          <span id="count-Track">0</span>
+          <button class="plus" data-type="Track" aria-label="Increase Track count">+</button>
+        </div>
 
-        <div class="thought-bubble">
-          <div id="thoughtText">
-            I need 6 approaches, a hold, an intercept, and to track a navigation point in order to get current.
+        <button id="logButton" class="secondary-btn">Log</button>
+        <button id="pauseBtn" class="secondary-btn">Pause</button>
+
+      </section>
+
+      <!-- FACTORY SCENE -->
+      <section class="factory-scene">
+
+        <div class="belts-wrapper">
+
+          <!-- Thought Bubble -->
+          <div class="thought-bubble">
+            <span id="thoughtText">I need 6 approaches...</span>
           </div>
-        </div>
 
-        <div class="chute">
-          <div class="chute-label">Chute</div>
-        </div>
-      </div>
-
-      <div class="belts-area">
-        <!-- Belt 1: Current -->
-        <div class="belt-wrapper belt1-wrapper">
-          <div class="belt-label">Current</div>
-          <div class="belt belt1" id="belt1">
-            <div class="months">
-              <span>Month 0</span>
-              <span>1</span>
-              <span>2</span>
-              <span>3</span>
-              <span>4</span>
-              <span>5</span>
-              <span>6</span>
+          <!-- Belt 1: Current -->
+          <div class="belt-wrapper belt1-wrapper" id="belt1Wrapper">
+            <div class="belt-label">Current</div>
+            <div class="belt belt1" id="belt1">
+              <div class="months">
+                <span>Month 0</span>
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+                <span>6</span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Belt 2: Not current but still time -->
-        <div class="belt-wrapper belt2-wrapper">
-          <div class="belt-label">Not Current, but there is still time</div>
-          <div class="belt belt2" id="belt2">
-            <div class="months">
-              <span>Month 6</span>
-              <span>7</span>
-              <span>8</span>
-              <span>9</span>
-              <span>10</span>
-              <span>11</span>
-              <span>12</span>
+          <!-- Pilot (with wrapper for animation control) -->
+          <div class="pilot-mover">
+            <div class="pilot-wrapper">
+              <img src="assets/pilot.png" alt="Pilot" class="pilot-img">
             </div>
           </div>
-          <div class="dumpster">
-            <div class="dumpster-body">Dumpster</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
 
-  <!-- IPC overlay -->
+          <!-- Belt 2: Not Current -->
+          <div class="belt-wrapper belt2-wrapper" id="belt2Wrapper">
+            <div class="belt-label">Not Current, but there is still time</div>
+            <div class="belt belt2" id="belt2">
+              <div class="months">
+                <span>Month 6</span>
+                <span>7</span>
+                <span>8</span>
+                <span>9</span>
+                <span>10</span>
+                <span>11</span>
+                <span>12</span>
+              </div>
+            </div>
+
+            <div class="dumpster">
+              <div class="dumpster-body">Dumpster</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- IPC OVERLAY -->
   <div id="ipcOverlay" class="ipc-overlay hidden">
     <div class="ipc-content">
       <h2>IPC Required</h2>
