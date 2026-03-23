@@ -8,13 +8,6 @@ const requirements = {
   Track: 1
 };
 
-let isPaused = false;
-
-// Disable only the Log button when paused
-function updatePauseState() {
-  logButton.disabled = isPaused;
-}
-
 let boxIdCounter = 0;
 
 const counts = {
@@ -32,6 +25,10 @@ const belt2 = document.getElementById('belt2');
 const thoughtText = document.getElementById('thoughtText');
 const ipcOverlay = document.getElementById('ipcOverlay');
 const resetButton = document.getElementById('resetButton');
+
+function updatePauseState() {
+  logButton.disabled = isPaused;
+}
 
 // --- Build one label per task (one box per event) ---
 function buildBoxes() {
