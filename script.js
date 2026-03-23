@@ -1,4 +1,6 @@
 // --- State ---
+let isPaused = false;
+
 let simRunning = false;
 
 let pilotWasCurrentAtLog = false;
