@@ -1,6 +1,8 @@
 // --- State ---
 let simRunning = false;
 
+let pilotWasCurrentAtLog = false;
+
 const requirements = {
   Approach: 6,
   Hold: 1,
@@ -246,6 +248,9 @@ beginButton.addEventListener('click', () => {
 logButton.addEventListener('click', () => {
   const labels = buildBoxes();
   if (labels.length === 0) return;
+
+  // Capture whether the pilot was current BEFORE logging
+  pilotWasCurrentAtLog = isPilotCurrent();
 
   if (counts.Approach > 0) {
     requirements.Approach = Math.max(0, requirements.Approach - counts.Approach);
