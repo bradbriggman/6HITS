@@ -1,127 +1,279 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Instrument Currency (61.57(c))</title>
-  <link rel="stylesheet" href="style.css">
-</head>
+// --- State ---
+let simRunning = false;
 
-<body>
-  <!-- HEADER -->
-  <header class="top-bar">
-    <div class="logo-title">
-      <img src="assets/us-aviation-logo.png" alt="US Aviation Logo" class="logo">
-      <h1>Instrument Currency (61.57(c))</h1>
-    </div>
-    <button id="beginButton" class="primary-btn">Begin</button>
-  </header>
+const requirements = {
+  Approach: 6,
+  Hold: 1,
+  Intercept: 1,
+  Track: 1
+};
 
-  <!-- SIMULATOR WRAPPER -->
-  <div class="sim-wrapper">
-    <main class="sim-container">
+let isPaused = false;
 
-      <!-- CONTROLS PANEL -->
-      <section class="controls-panel">
+// Disable only the Log button when paused
+function updatePauseState() {
+  logButton.disabled = isPaused;
+}
 
-        <div class="counter-row">
-          <span>Approach</span>
-          <button class="minus" data-type="Approach" aria-label="Decrease Approach count">–</button>
-          <span id="count-Approach">0</span>
-          <button class="plus" data-type="Approach" aria-label="Increase Approach count">+</button>
-        </div>
+let boxIdCounter = 0;
 
-        <div class="counter-row">
-          <span>Hold</span>
-          <button class="minus" data-type="Hold" aria-label="Decrease Hold count">–</button>
-          <span id="count-Hold">0</span>
-          <button class="plus" data-type="Hold" aria-label="Increase Hold count">+</button>
-        </div>
+const counts = {
+  Approach: 0,
+  Hold: 0,
+  Intercept: 0,
+  Track: 0
+};
 
-        <div class="counter-row">
-          <span>Intercept</span>
-          <button class="minus" data-type="Intercept" aria-label="Decrease Intercept count">–</button>
-          <span id="count-Intercept">0</span>
-          <button class="plus" data-type="Intercept" aria-label="Increase Intercept count">+</button>
-        </div>
+// --- DOM references ---
+const beginButton = document.getElementById('beginButton');
+const logButton = document.getElementById('logButton');
+const belt1 = document.getElementById('belt1');
+const belt2 = document.getElementById('belt2');
+const thoughtText = document.getElementById('thoughtText');
+const ipcOverlay = document.getElementById('ipcOverlay');
+const resetButton = document.getElementById('resetButton');
 
-        <div class="counter-row">
-          <span>Track</span>
-          <button class="minus" data-type="Track" aria-label="Decrease Track count">–</button>
-          <span id="count-Track">0</span>
-          <button class="plus" data-type="Track" aria-label="Increase Track count">+</button>
-        </div>
+// --- Build one label per task (one box per event) ---
+function buildBoxes() {
+  const boxes = [];
 
-        <button id="logButton" class="secondary-btn">Log</button>
-        <button id="pauseBtn" class="secondary-btn">Pause</button>
+  for (let i = 0; i < counts.Approach; i++) boxes.push('A');
+  for (let i = 0; i < counts.Hold; i++) boxes.push('H');
+  for (let i = 0; i < counts.Intercept; i++) boxes.push('I');
+  for (let i = 0; i < counts.Track; i++) boxes.push('T');
 
-      </section>
+  return boxes;
+}
 
-      <!-- FACTORY SCENE -->
-      <section class="factory-scene">
+const pauseBtn = document.getElementById('pauseBtn');
 
-        <div class="belts-wrapper">
+pauseBtn.addEventListener('click', () => {
+  isPaused = !isPaused;
+  pauseBtn.textContent = isPaused ? "Resume" : "Pause";
 
-          <!-- Thought Bubble -->
-          <div class="thought-bubble">
-            <span id="thoughtText">I need 6 approaches...</span>
-          </div>
+  // Freeze or unfreeze all moving boxes
+  document.querySelectorAll('.box').forEach(box => {
+    box.style.animationPlayState = isPaused ? "paused" : "running";
+  });
 
-          <!-- Belt 1: Current -->
-          <div class="belt-wrapper belt1-wrapper" id="belt1Wrapper">
-            <div class="belt-label">Current</div>
-            <div class="belt belt1" id="belt1">
-              <div class="months">
-                <span>Month 0</span>
-                <span>1</span>
-                <span>2</span>
-                <span>3</span>
-                <span>4</span>
-                <span>5</span>
-                <span>6</span>
-              </div>
-            </div>
-          </div>
+  // Disable only the Log button
+  logButton.disabled = isPaused;
+});
 
-          <!-- Pilot (with wrapper for animation control) -->
-          <div class="pilot-mover">
-            <div class="pilot-wrapper">
-              <img src="assets/pilot.png" alt="Pilot" class="pilot-img">
-            </div>
-          </div>
+// Disable only the Log button when paused
+logButton.disabled = isPaused;
 
-          <!-- Belt 2: Not Current -->
-          <div class="belt-wrapper belt2-wrapper" id="belt2Wrapper">
-            <div class="belt-label">Not Current, but there is still time</div>
-            <div class="belt belt2" id="belt2">
-              <div class="months">
-                <span>Month 6</span>
-                <span>7</span>
-                <span>8</span>
-                <span>9</span>
-                <span>10</span>
-                <span>11</span>
-                <span>12</span>
-              </div>
-            </div>
+// --- Plus / minus buttons ---
+document.querySelectorAll('.plus').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.dataset.type;
+    counts[type]++;
+    document.getElementById(`count-${type}`).textContent = counts[type];
+  });
+});
 
-            <div class="dumpster">
-              <div class="dumpster-body">Dumpster</div>
-            </div>
-          </div>
+document.querySelectorAll('.minus').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.dataset.type;
+    if (counts[type] > 0) {
+      counts[type]--;
+      document.getElementById(`count-${type}`).textContent = counts[type];
+    }
+  });
+});
 
-        </div>
-      </section>
-    </main>
-  </div>
+// --- Helpers ---
+function updateThoughtBubble() {
+  const parts = [];
 
-  <!-- IPC OVERLAY -->
-  <div id="ipcOverlay" class="ipc-overlay hidden">
-    <div class="ipc-content">
-      <h2>IPC Required</h2>
-      <button id="resetButton" class="primary-btn">Reset</button>
-    </div>
-  </div>
+  if (requirements.Approach > 0) {
+    parts.push(`${requirements.Approach} approach${requirements.Approach > 1 ? 'es' : ''}`);
+  }
+  if (requirements.Hold > 0) {
+    parts.push('a hold');
+  }
+  if (requirements.Intercept > 0) {
+    parts.push('an intercept');
+  }
+  if (requirements.Track > 0) {
+    parts.push('to track a navigation point');
+  }
 
-  <script src="script.js"></script>
-</body>
-</html>
+  if (parts.length === 0) {
+    thoughtText.textContent = 'I am fully current.';
+  } else {
+    thoughtText.textContent = `I need ${parts.join(', ')} in order to get current.`;
+  }
+}
+
+// --- Create a labeled box ---
+function createBox(label) {
+  const box = document.createElement('div');
+  box.classList.add('box');
+  box.dataset.id = ++boxIdCounter;
+  box.dataset.label = label;   // IMPORTANT FIX
+
+  // Internal 3-row layout
+  const labelContainer = document.createElement('div');
+  labelContainer.classList.add('box-labels');
+
+  const top = document.createElement('div');
+  top.classList.add('box-row');
+  top.textContent = label === 'A' ? 'Approach' : '';
+
+  const middle = document.createElement('div');
+  middle.classList.add('box-row');
+  middle.textContent = label === 'H' ? 'Hold' : '';
+
+  const bottom = document.createElement('div');
+  bottom.classList.add('box-row', 'bottom-row');
+
+  if (label === 'I') {
+    const iTag = document.createElement('span');
+    iTag.textContent = 'Intercept';
+    bottom.appendChild(iTag);
+  }
+
+  if (label === 'T') {
+    const tTag = document.createElement('span');
+    tTag.textContent = 'Track';
+    bottom.appendChild(tTag);
+  }
+
+  labelContainer.appendChild(top);
+  labelContainer.appendChild(middle);
+  labelContainer.appendChild(bottom);
+
+  box.appendChild(labelContainer);
+  return box;
+}
+
+// --- Belt 1 logging ---
+function logEventToBelt1(label) {
+  const box = createBox(label);
+
+  box.style.left = '0px';
+  belt1.appendChild(box);
+
+  if (simRunning && !isPaused) {
+  requestAnimationFrame(() => box.classList.add('moving'));
+}
+
+  box.addEventListener('animationend', () => {
+    moveBoxToBelt2(box);
+  }, { once: true });
+}
+
+// --- Move box to Belt 2 ---
+function moveBoxToBelt2(box) {
+  if (box.parentElement === belt1) {
+    belt1.removeChild(box);
+  }
+
+  const label = box.dataset.label;  // FIXED
+
+  if (label === 'A') requirements.Approach++;
+  if (label === 'H') requirements.Hold++;
+  if (label === 'I') requirements.Intercept++;
+  if (label === 'T') requirements.Track++;
+
+  updateThoughtBubble();
+
+  box.classList.remove('moving');
+  box.style.transform = 'translateX(0)';
+  box.style.left = '0px';
+
+  belt2.appendChild(box);
+
+  if (simRunning && !isPaused) {
+  requestAnimationFrame(() => box.classList.add('moving'));
+}
+
+  box.addEventListener('animationend', () => {
+    if (!isPilotCurrent()) triggerIPC();
+  }, { once: true });
+}
+
+// --- IPC ---
+function triggerIPC() {
+  simRunning = false;
+  ipcOverlay.classList.remove('hidden');
+}
+
+// --- Reset ---
+function resetSim() {
+  simRunning = false;
+  ipcOverlay.classList.add('hidden');
+
+  requirements.Approach = 6;
+  requirements.Hold = 1;
+  requirements.Intercept = 1;
+  requirements.Track = 1;
+
+  updateThoughtBubble();
+
+  document.querySelectorAll('.box').forEach(b => b.remove());
+
+  for (let key in counts) {
+    counts[key] = 0;
+    document.getElementById(`count-${key}`).textContent = 0;
+  }
+}
+
+// --- Pilot current check ---
+function isPilotCurrent() {
+  return (
+    requirements.Approach === 0 &&
+    requirements.Hold === 0 &&
+    requirements.Intercept === 0 &&
+    requirements.Track === 0
+  );
+}
+
+// --- Event listeners ---
+beginButton.addEventListener('click', () => {
+  simRunning = true;
+
+  document.querySelectorAll('.box').forEach(box => {
+    if (!box.classList.contains('moving')) {
+      requestAnimationFrame(() => box.classList.add('moving'));
+    }
+  });
+
+  beginButton.disabled = true;
+});
+
+logButton.addEventListener('click', () => {
+  const labels = buildBoxes();
+  if (labels.length === 0) return;
+
+  if (counts.Approach > 0) {
+    requirements.Approach = Math.max(0, requirements.Approach - counts.Approach);
+  }
+  if (counts.Hold > 0) {
+    requirements.Hold = Math.max(0, requirements.Hold - counts.Hold);
+  }
+  if (counts.Intercept > 0) {
+    requirements.Intercept = Math.max(0, requirements.Intercept - counts.Intercept);
+  }
+  if (counts.Track > 0) {
+    requirements.Track = Math.max(0, requirements.Track - counts.Track);
+  }
+
+  updateThoughtBubble();
+
+  labels.forEach(label => logEventToBelt1(label));
+
+  for (let key in counts) {
+    counts[key] = 0;
+    document.getElementById(`count-${key}`).textContent = 0;
+  }
+});
+
+resetButton.addEventListener('click', () => {
+  resetSim();
+  beginButton.disabled = false;
+});
+
+// Initial text
+updateThoughtBubble();
