@@ -12,6 +12,13 @@ const requirements = {
 // Track boxes so we can later map them to belt 2 / IPC logic
 let boxIdCounter = 0;
 
+const counts = {
+  Approach: 0,
+  Hold: 0,
+  Intercept: 0,
+  Track: 0
+};
+
 // --- DOM references ---
 
 const beginButton = document.getElementById('beginButton');
@@ -51,18 +58,6 @@ document.querySelectorAll('.minus').forEach(btn => {
 
 // --- Helpers ---
 
-const counts = {
-  Approach: 0,
-  Hold: 0,
-  Intercept: 0,
-  Track: 0
-};
-
-function clearSelection() {
-  const radios = document.querySelectorAll('input[name="eventType"]');
-  radios.forEach(r => (r.checked = false));
-}
-
 function updateThoughtBubble() {
   const parts = [];
 
@@ -95,8 +90,8 @@ function createBox(label) {
 }
 
 // For now, boxes ride belt 1 only. Later we’ll promote them to belt 2 when they age.
-function logEventToBelt1(eventType) {
-  const box = createBox(eventType);
+function logEventToBelt1(label) {
+  const box = createBox(label);
 
   // Position box at the left edge of belt 1, visually near the chute
   box.style.left = '0px';
@@ -111,8 +106,6 @@ function logEventToBelt1(eventType) {
 
   // Listen for animation end to later move to belt 2 or trigger IPC logic
   box.addEventListener('animationend', () => {
-    // Placeholder: when a box reaches end of belt 1, it should move to belt 2
-    // For now, we simply move it visually to belt 2 and restart the animation.
     moveBoxToBelt2(box);
   });
 }
@@ -161,10 +154,6 @@ function resetSim() {
 
   // Clear boxes
   document.querySelectorAll('.box').forEach(b => b.remove());
-
-  // Reset controls
-  clearSelection();
-}
 
 // --- Event listeners ---
 
