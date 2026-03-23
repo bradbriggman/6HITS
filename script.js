@@ -1,10 +1,7 @@
 console.log("JS loaded!");
-  
-/* ============================================================
-   GLOBAL STATE
-============================================================ */
-let isPaused = false;          // Pause flag
-let beltsMoving = false;       // Prevent double-start
+
+let isPaused = false;
+let beltsMoving = false;
 
 const counters = {
   approach: 0,
@@ -13,26 +10,15 @@ const counters = {
   track: 0
 };
 
-
-/* ============================================================
-   PAUSE BUTTON — SINGLE CLEAN LISTENER
-============================================================ */
 document.getElementById("pauseBtn").addEventListener("click", () => {
   isPaused = !isPaused;
-
-  // Update button text
   document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
 
-  // Freeze/unfreeze belts
   document.querySelectorAll(".belt-rollers").forEach(rollers => {
     rollers.style.animationPlayState = isPaused ? "paused" : "running";
   });
 });
 
-
-/* ============================================================
-   COUNTER BUTTONS (+ / -)
-============================================================ */
 document.querySelectorAll(".plus").forEach(btn => {
   btn.addEventListener("click", () => {
     const type = btn.dataset.type;
@@ -49,10 +35,6 @@ document.querySelectorAll(".minus").forEach(btn => {
   });
 });
 
-
-/* ============================================================
-   BEGIN BUTTON — START BELT MOVEMENT
-============================================================ */
 document.getElementById("beginBtn").addEventListener("click", () => {
   if (beltsMoving) return;
   beltsMoving = true;
@@ -62,10 +44,6 @@ document.getElementById("beginBtn").addEventListener("click", () => {
   });
 });
 
-
-/* ============================================================
-   ROLLER ANIMATION KEYFRAMES
-============================================================ */
 const style = document.createElement("style");
 style.innerHTML = `
 @keyframes roll {
@@ -74,10 +52,6 @@ style.innerHTML = `
 }`;
 document.head.appendChild(style);
 
-
-/* ============================================================
-   LOG BUTTON → CREATE BOX
-============================================================ */
 document.getElementById("logBtn").addEventListener("click", () => {
   const label = buildLabel();
   if (!label) return;
@@ -86,10 +60,6 @@ document.getElementById("logBtn").addEventListener("click", () => {
   resetCounters();
 });
 
-
-/* ============================================================
-   BUILD LABEL FROM COUNTERS
-============================================================ */
 function buildLabel() {
   let parts = [];
 
@@ -101,10 +71,6 @@ function buildLabel() {
   return parts.join(" ");
 }
 
-
-/* ============================================================
-   RESET COUNTERS
-============================================================ */
 function resetCounters() {
   for (let key in counters) counters[key] = 0;
 
@@ -114,10 +80,6 @@ function resetCounters() {
   document.getElementById("trackCount").textContent = 0;
 }
 
-
-/* ============================================================
-   CREATE + MOVE BOX
-============================================================ */
 function createBox(label) {
   const box = document.createElement("div");
   box.className = "box";
@@ -126,25 +88,27 @@ function createBox(label) {
   const layer = document.getElementById("boxesLayer");
   layer.appendChild(box);
 
-  // Starting position on Belt 1
   box.style.left = "0px";
-  box.style.top = "120px";
+  box.style.top = "0px"; // now aligned by CSS container
 
-  const pixelsPerFrame = 0.27777; // 16.6666px/sec at 60fps
+  const pixelsPerFrame = 0.27777;
 
   const interval = setInterval(() => {
     if (isPaused) return;
 
-    // Smooth movement at 16.6666px/sec
     let currentLeft = parseFloat(box.style.left) || 0;
     let newLeft = currentLeft + pixelsPerFrame;
     box.style.left = newLeft + "px";
 
-    // Drop to Belt 2 when passing 6-month mark (300px)
     if (!box.hasDropped && newLeft >= 300) {
-      box.style.top = "500px"; // adjust if needed
+      box.style.top = "240px"; 
       box.hasDropped = true;
     }
 
-  }, 16.67); // <-- THIS is the critical fix
+    if (newLeft >= 580) {
+      clearInterval(interval);
+      box.remove();
+    }
+
+  }, 16.67);
 }
