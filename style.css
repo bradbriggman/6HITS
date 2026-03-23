@@ -11,8 +11,6 @@
   background-position: center;   /* keeps the subject centered */
   background-repeat: no-repeat;  /* prevents tiling */
   background-attachment: fixed;  /* keeps background steady while belts move */
-}
-  background: #f3f4f6;
   color: #111827;
 }
 
