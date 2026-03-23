@@ -154,6 +154,7 @@ function resetSim() {
 
   // Clear boxes
   document.querySelectorAll('.box').forEach(b => b.remove());
+}
 
 // --- Event listeners ---
 
