@@ -180,7 +180,9 @@
 }
 
 .belt2-wrapper {
-  margin-left: calc(40px + 500px); /* looks like a step down from belt 1 */
+  position: relative;
+  left: 500px;   /* shift belt 2 exactly to the end of belt 1 */
+  top: -30px;    /* optional: creates the “step down” look */
 }
 
 .months {
