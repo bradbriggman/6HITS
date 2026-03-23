@@ -22,15 +22,41 @@ const thoughtText = document.getElementById('thoughtText');
 const ipcOverlay = document.getElementById('ipcOverlay');
 const resetButton = document.getElementById('resetButton');
 
+function buildLabel() {
+  let parts = [];
+  if (counts.Approach > 0) parts.push(`${counts.Approach}A`);
+  if (counts.Hold > 0) parts.push(`${counts.Hold}H`);
+  if (counts.Intercept > 0) parts.push(`${counts.Intercept}I`);
+  if (counts.Track > 0) parts.push(`${counts.Track}T`);
+  return parts.join(' ');
+}
+
+document.querySelectorAll('.plus').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.dataset.type;
+    counts[type]++;
+    document.getElementById(`count-${type}`).textContent = counts[type];
+  });
+});
+
+document.querySelectorAll('.minus').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const type = btn.dataset.type;
+    if (counts[type] > 0) {
+      counts[type]--;
+      document.getElementById(`count-${type}`).textContent = counts[type];
+    }
+  });
+});
+
 // --- Helpers ---
 
-function getSelectedEventType() {
-  const radios = document.querySelectorAll('input[name="eventType"]');
-  for (const r of radios) {
-    if (r.checked) return r.value;
-  }
-  return null;
-}
+const counts = {
+  Approach: 0,
+  Hold: 0,
+  Intercept: 0,
+  Track: 0
+};
 
 function clearSelection() {
   const radios = document.querySelectorAll('input[name="eventType"]');
@@ -158,17 +184,16 @@ beginButton.addEventListener('click', () => {
 });
 
 logButton.addEventListener('click', () => {
-  const eventType = getSelectedEventType();
-  if (!eventType) return;
+  const label = buildLabel();
+  if (!label) return; // nothing selected
 
-  // Decrement requirement if still needed
-  if (requirements[eventType] > 0) {
-    requirements[eventType] -= 1;
-    updateThoughtBubble();
+  logEventToBelt1(label);
+
+  // Reset counters
+  for (let key in counts) {
+    counts[key] = 0;
+    document.getElementById(`count-${key}`).textContent = 0;
   }
-
-  logEventToBelt1(eventType);
-  clearSelection();
 });
 
 resetButton.addEventListener('click', () => {
