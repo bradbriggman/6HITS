@@ -167,12 +167,15 @@ function moveBoxToBelt2(box) {
     belt1.removeChild(box);
   }
 
-  const label = box.dataset.label;  // FIXED
+  const label = box.dataset.label;
 
-  if (label === 'A') requirements.Approach++;
-  if (label === 'H') requirements.Hold++;
-  if (label === 'I') requirements.Intercept++;
-  if (label === 'T') requirements.Track++;
+  // Only increment requirements if the pilot was NOT current at log time
+  if (!pilotWasCurrentAtLog) {
+    if (label === 'A') requirements.Approach++;
+    if (label === 'H') requirements.Hold++;
+    if (label === 'I') requirements.Intercept++;
+    if (label === 'T') requirements.Track++;
+  }
 
   updateThoughtBubble();
 
@@ -183,8 +186,8 @@ function moveBoxToBelt2(box) {
   belt2.appendChild(box);
 
   if (simRunning && !isPaused) {
-  requestAnimationFrame(() => box.classList.add('moving'));
-}
+    requestAnimationFrame(() => box.classList.add('moving'));
+  }
 
   box.addEventListener('animationend', () => {
     if (!isPilotCurrent()) triggerIPC();
