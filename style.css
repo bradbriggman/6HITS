@@ -176,7 +176,7 @@ body {
 }
 
 .belt2-wrapper {
-  margin-left: 80px; /* looks like a step down from belt 1 */
+  margin-left: calc(40px + 500px); /* looks like a step down from belt 1 */
 }
 
 .months {
