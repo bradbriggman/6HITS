@@ -1,114 +1,180 @@
-console.log("JS loaded!");
+// --- State ---
 
-let isPaused = false;
-let beltsMoving = false;
+let simRunning = false;
 
-const counters = {
-  approach: 0,
-  hold: 0,
-  intercept: 0,
-  track: 0
+const requirements = {
+  Approach: 6,
+  Hold: 1,
+  Intercept: 1,
+  Track: 1
 };
 
-document.getElementById("pauseBtn").addEventListener("click", () => {
-  isPaused = !isPaused;
-  document.getElementById("pauseBtn").textContent = isPaused ? "Resume" : "Pause";
+// Track boxes so we can later map them to belt 2 / IPC logic
+let boxIdCounter = 0;
 
-  document.querySelectorAll(".belt-rollers").forEach(rollers => {
-    rollers.style.animationPlayState = isPaused ? "paused" : "running";
-  });
-});
+// --- DOM references ---
 
-document.querySelectorAll(".plus").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const type = btn.dataset.type;
-    counters[type]++;
-    document.getElementById(type + "Count").textContent = counters[type];
-  });
-});
+const beginButton = document.getElementById('beginButton');
+const logButton = document.getElementById('logButton');
+const belt1 = document.getElementById('belt1');
+const belt2 = document.getElementById('belt2');
+const thoughtText = document.getElementById('thoughtText');
+const ipcOverlay = document.getElementById('ipcOverlay');
+const resetButton = document.getElementById('resetButton');
 
-document.querySelectorAll(".minus").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const type = btn.dataset.type;
-    if (counters[type] > 0) counters[type]--;
-    document.getElementById(type + "Count").textContent = counters[type];
-  });
-});
+// --- Helpers ---
 
-document.getElementById("beginBtn").addEventListener("click", () => {
-  if (beltsMoving) return;
-  beltsMoving = true;
-
-  document.querySelectorAll(".belt-rollers").forEach(rollers => {
-    rollers.style.animation = "roll 0.3s linear infinite";
-  });
-});
-
-const style = document.createElement("style");
-style.innerHTML = `
-@keyframes roll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-28px); }
-}`;
-document.head.appendChild(style);
-
-document.getElementById("logBtn").addEventListener("click", () => {
-  const label = buildLabel();
-  if (!label) return;
-
-  createBox(label);
-  resetCounters();
-});
-
-function buildLabel() {
-  let parts = [];
-
-  if (counters.approach > 0) parts.push(`${counters.approach}A`);
-  if (counters.hold > 0) parts.push(`${counters.hold}H`);
-  if (counters.intercept > 0) parts.push(`${counters.intercept}I`);
-  if (counters.track > 0) parts.push(`${counters.track}T`);
-
-  return parts.join(" ");
+function getSelectedEventType() {
+  const radios = document.querySelectorAll('input[name="eventType"]');
+  for (const r of radios) {
+    if (r.checked) return r.value;
+  }
+  return null;
 }
 
-function resetCounters() {
-  for (let key in counters) counters[key] = 0;
+function clearSelection() {
+  const radios = document.querySelectorAll('input[name="eventType"]');
+  radios.forEach(r => (r.checked = false));
+}
 
-  document.getElementById("approachCount").textContent = 0;
-  document.getElementById("holdCount").textContent = 0;
-  document.getElementById("interceptCount").textContent = 0;
-  document.getElementById("trackCount").textContent = 0;
+function updateThoughtBubble() {
+  const parts = [];
+
+  if (requirements.Approach > 0) {
+    parts.push(`${requirements.Approach} approach${requirements.Approach > 1 ? 'es' : ''}`);
+  }
+  if (requirements.Hold > 0) {
+    parts.push('a hold');
+  }
+  if (requirements.Intercept > 0) {
+    parts.push('an intercept');
+  }
+  if (requirements.Track > 0) {
+    parts.push('to track a navigation point');
+  }
+
+  if (parts.length === 0) {
+    thoughtText.textContent = 'I am fully current.';
+  } else {
+    thoughtText.textContent = `I need ${parts.join(', ')} in order to get current.`;
+  }
 }
 
 function createBox(label) {
-  const box = document.createElement("div");
-  box.className = "box";
+  const box = document.createElement('div');
+  box.classList.add('box');
   box.textContent = label;
-
-  const layer = document.getElementById("boxesLayer");
-  layer.appendChild(box);
-
-  box.style.left = "0px";
-  box.style.top = "0px"; // now aligned by CSS container
-
-  const pixelsPerFrame = 0.27777;
-
-  const interval = setInterval(() => {
-    if (isPaused) return;
-
-    let currentLeft = parseFloat(box.style.left) || 0;
-    let newLeft = currentLeft + pixelsPerFrame;
-    box.style.left = newLeft + "px";
-
-    if (!box.hasDropped && newLeft >= 300) {
-      box.style.top = "240px"; 
-      box.hasDropped = true;
-    }
-
-    if (newLeft >= 580) {
-      clearInterval(interval);
-      box.remove();
-    }
-
-  }, 16.67);
+  box.dataset.id = ++boxIdCounter;
+  return box;
 }
+
+// For now, boxes ride belt 1 only. Later we’ll promote them to belt 2 when they age.
+function logEventToBelt1(eventType) {
+  const box = createBox(eventType);
+
+  // Position box at the left edge of belt 1, visually near the chute
+  box.style.left = '0px';
+  belt1.appendChild(box);
+
+  // Trigger movement only if sim is running
+  if (simRunning) {
+    requestAnimationFrame(() => {
+      box.classList.add('moving');
+    });
+  }
+
+  // Listen for animation end to later move to belt 2 or trigger IPC logic
+  box.addEventListener('animationend', () => {
+    // Placeholder: when a box reaches end of belt 1, it should move to belt 2
+    // For now, we simply move it visually to belt 2 and restart the animation.
+    moveBoxToBelt2(box);
+  });
+}
+
+function moveBoxToBelt2(box) {
+  // Remove from belt 1
+  if (box.parentElement === belt1) {
+    belt1.removeChild(box);
+  }
+
+  // Reset animation
+  box.classList.remove('moving');
+  box.style.transform = 'translateX(0)';
+  box.style.left = '0px';
+
+  belt2.appendChild(box);
+
+  if (simRunning) {
+    requestAnimationFrame(() => {
+      box.classList.add('moving');
+    });
+  }
+
+  box.addEventListener('animationend', () => {
+    // When a box reaches the end of belt 2, it falls into the dumpster.
+    // This is where IPC should be triggered if the requirement wasn’t satisfied in time.
+    triggerIPC();
+  }, { once: true });
+}
+
+function triggerIPC() {
+  simRunning = false;
+  ipcOverlay.classList.remove('hidden');
+}
+
+function resetSim() {
+  simRunning = false;
+  ipcOverlay.classList.add('hidden');
+
+  // Reset requirements
+  requirements.Approach = 6;
+  requirements.Hold = 1;
+  requirements.Intercept = 1;
+  requirements.Track = 1;
+  updateThoughtBubble();
+
+  // Clear boxes
+  document.querySelectorAll('.box').forEach(b => b.remove());
+
+  // Reset controls
+  clearSelection();
+}
+
+// --- Event listeners ---
+
+beginButton.addEventListener('click', () => {
+  simRunning = true;
+
+  // Any existing boxes should start moving if they aren't already
+  document.querySelectorAll('.box').forEach(box => {
+    if (!box.classList.contains('moving')) {
+      requestAnimationFrame(() => {
+        box.classList.add('moving');
+      });
+    }
+  });
+
+  beginButton.disabled = true;
+});
+
+logButton.addEventListener('click', () => {
+  const eventType = getSelectedEventType();
+  if (!eventType) return;
+
+  // Decrement requirement if still needed
+  if (requirements[eventType] > 0) {
+    requirements[eventType] -= 1;
+    updateThoughtBubble();
+  }
+
+  logEventToBelt1(eventType);
+  clearSelection();
+});
+
+resetButton.addEventListener('click', () => {
+  resetSim();
+  beginButton.disabled = false;
+});
+
+// Initial text
+updateThoughtBubble();
