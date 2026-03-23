@@ -14,13 +14,11 @@
 
   <h1>Instrument Currency (61.57(c))</h1>
 
-  <!-- TOP PANEL: CONTROLS / LOGGING -->
+  <!-- TOP PANEL -->
   <div class="top-bar">
 
-    <!-- BEGIN BUTTON -->
     <button id="beginBtn" class="begin-btn">Begin</button>
 
-    <!-- LOGGING OPTIONS -->
     <div class="log-section">
 
       <div class="log-item">
@@ -61,17 +59,15 @@
 
     </div>
 
-    <!-- LOG + PAUSE BUTTONS -->
     <button id="logBtn" class="log-btn">Log</button>
     <button id="pauseBtn">Pause</button>
 
   </div>
 
-  <!-- MAIN SIMULATOR AREA -->
+  <!-- MAIN SIMULATOR -->
   <div class="panel">
     <div class="sim-container">
 
-      <!-- PILOT + THOUGHT BUBBLE -->
       <div class="pilot-wrapper">
         <img src="pilot.png" class="pilot-img" alt="Pilot" />
         <div class="thought-bubble">
@@ -85,12 +81,10 @@
         </div>
       </div>
 
-      <!-- FACTORY AREA -->
       <div class="factory-area">
 
         <div class="chute">CHUTE</div>
 
-        <!-- TIMELINE 1 -->
         <div class="timeline1">
           <div class="tick" style="left: 0px;">0</div>
           <div class="tick" style="left: 83px;">1</div>
@@ -101,7 +95,6 @@
           <div class="tick" style="left: 498px;">6</div>
         </div>
 
-        <!-- BELT 1 -->
         <div class="belt1-wrapper">
           <div class="belt" id="belt1">
             <div class="belt-rollers">
@@ -114,7 +107,6 @@
 
         <div class="belt-step"></div>
 
-        <!-- TIMELINE 2 -->
         <div class="timeline2">
           <div class="tick" style="left: 83px;">7</div>
           <div class="tick" style="left: 166px;">8</div>
@@ -124,7 +116,6 @@
           <div class="tick" style="left: 498px;">12</div>
         </div>
 
-        <!-- BELT 2 -->
         <div class="belt2-wrapper">
           <div class="belt" id="belt2">
             <div class="belt-rollers">
@@ -135,24 +126,20 @@
           </div>
         </div>
 
-        <!-- BOXES LAYER -->
         <div class="boxes-layer" id="boxesLayer"></div>
 
-        <!-- DUMPSTER -->
         <div class="dumpster">DUMPSTER</div>
 
-        <!-- IPC BANNER -->
         <div class="ipc-banner" id="ipcBanner">
           <div>IPC REQUIRED</div>
           <div style="font-size:1rem;margin-top:8px;">You are no longer instrument current.</div>
         </div>
 
-      </div> <!-- end factory-area -->
+      </div>
 
-    </div> <!-- end sim-container -->
-  </div> <!-- end panel -->
+    </div>
+  </div>
 
-  <!-- Your script goes LAST -->
   <script src="script.js?v=1.1"></script>
 
 </body>
