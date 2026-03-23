@@ -1,146 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Instrument Currency (61.57(c))</title>
-  <link rel="stylesheet" href="style.css?v=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-  <div class="logo-wrapper">
-    <img src="us-aviation-logo.png" alt="US Aviation Academy Logo" class="academy-logo">
-  </div>
-
-  <h1>Instrument Currency (61.57(c))</h1>
-
-  <!-- TOP PANEL -->
-  <div class="top-bar">
-
-    <button id="beginBtn" class="begin-btn">Begin</button>
-
-    <div class="log-section">
-
-      <div class="log-item">
-        <span class="log-label">Approach</span>
-        <div class="counter">
-          <button class="minus" data-type="approach">-</button>
-          <span class="counter-value" id="approachCount">0</span>
-          <button class="plus" data-type="approach">+</button>
-        </div>
-      </div>
-
-      <div class="log-item">
-        <span class="log-label">Hold</span>
-        <div class="counter">
-          <button class="minus" data-type="hold">-</button>
-          <span class="counter-value" id="holdCount">0</span>
-          <button class="plus" data-type="hold">+</button>
-        </div>
-      </div>
-
-      <div class="log-item">
-        <span class="log-label">Intercept</span>
-        <div class="counter">
-          <button class="minus" data-type="intercept">-</button>
-          <span class="counter-value" id="interceptCount">0</span>
-          <button class="plus" data-type="intercept">+</button>
-        </div>
-      </div>
-
-      <div class="log-item">
-        <span class="log-label">Track</span>
-        <div class="counter">
-          <button class="minus" data-type="track">-</button>
-          <span class="counter-value" id="trackCount">0</span>
-          <button class="plus" data-type="track">+</button>
-        </div>
-      </div>
-
+  <header class="top-bar">
+    <div class="logo-title">
+      <!-- Replace src with your actual logo file -->
+      <img src="us-aviation-logo.png" alt="US Aviation Logo" class="logo">
+      <h1>Instrument Currency (61.57(c))</h1>
     </div>
+    <button id="beginButton" class="primary-btn">Begin</button>
+  </header>
 
-    <button id="logBtn" class="log-btn">Log</button>
-    <button id="pauseBtn">Pause</button>
+  <main class="sim-container">
+    <section class="controls-panel">
+      <div class="options-group">
+        <label><input type="radio" name="eventType" value="Approach"> Approach</label>
+        <label><input type="radio" name="eventType" value="Hold"> Hold</label>
+        <label><input type="radio" name="eventType" value="Intercept"> Intercept</label>
+        <label><input type="radio" name="eventType" value="Track"> Track</label>
+      </div>
+      <button id="logButton" class="secondary-btn">Log</button>
+    </section>
 
-  </div>
+    <section class="factory-scene">
+      <div class="pilot-area">
+        <!-- Replace src with your actual pilot PNG -->
+        <img src="pilot.png" alt="Pilot" class="pilot-img">
 
-  <!-- MAIN SIMULATOR -->
-  <div class="panel">
-    <div class="sim-container">
-
-      <div class="pilot-wrapper">
-        <img src="pilot.png" class="pilot-img" alt="Pilot" />
         <div class="thought-bubble">
-          <div class="thought-title">To Stay Current:</div>
-          <ul class="thought-list">
-            <li>6 Approaches</li>
-            <li>1 Hold</li>
-            <li>1 Intercept</li>
-            <li>1 Track</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="factory-area">
-
-        <div class="chute">CHUTE</div>
-
-        <div class="timeline1">
-          <div class="tick" style="left: 0px;">0</div>
-          <div class="tick" style="left: 83px;">1</div>
-          <div class="tick" style="left: 166px;">2</div>
-          <div class="tick" style="left: 249px;">3</div>
-          <div class="tick" style="left: 332px;">4</div>
-          <div class="tick" style="left: 415px;">5</div>
-          <div class="tick" style="left: 498px;">6</div>
-        </div>
-
-        <div class="belt1-wrapper">
-          <div class="belt" id="belt1">
-            <div class="belt-rollers">
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-            </div>
-            <div class="belt-label">Current (0–6 months)</div>
+          <div id="thoughtText">
+            I need 6 approaches, a hold, an intercept, and to track a navigation point in order to get current.
           </div>
         </div>
 
-        <div class="belt-step"></div>
-
-        <div class="timeline2">
-          <div class="tick" style="left: 83px;">7</div>
-          <div class="tick" style="left: 166px;">8</div>
-          <div class="tick" style="left: 249px;">9</div>
-          <div class="tick" style="left: 332px;">10</div>
-          <div class="tick" style="left: 415px;">11</div>
-          <div class="tick" style="left: 498px;">12</div>
+        <div class="chute">
+          <div class="chute-label">Chute</div>
         </div>
+      </div>
 
-        <div class="belt2-wrapper">
-          <div class="belt" id="belt2">
-            <div class="belt-rollers">
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
-              <div class="roller"></div><div class="roller"></div><div class="roller"></div><div class="roller"></div>
+      <div class="belts-area">
+        <!-- Belt 1: Current -->
+        <div class="belt-wrapper belt1-wrapper">
+          <div class="belt-label">Current</div>
+          <div class="belt belt1" id="belt1">
+            <div class="months">
+              <span>Month 0</span>
+              <span>1</span>
+              <span>2</span>
+              <span>3</span>
+              <span>4</span>
+              <span>5</span>
+              <span>6</span>
             </div>
-            <div class="belt-label">Not Current (7–12 months)</div>
           </div>
         </div>
 
-        <div class="boxes-layer" id="boxesLayer"></div>
-
-        <div class="dumpster">DUMPSTER</div>
-
-        <div class="ipc-banner" id="ipcBanner">
-          <div>IPC REQUIRED</div>
-          <div style="font-size:1rem;margin-top:8px;">You are no longer instrument current.</div>
+        <!-- Belt 2: Not current but still time -->
+        <div class="belt-wrapper belt2-wrapper">
+          <div class="belt-label">Not Current, but there is still time</div>
+          <div class="belt belt2" id="belt2">
+            <div class="months">
+              <span>Month 6</span>
+              <span>7</span>
+              <span>8</span>
+              <span>9</span>
+              <span>10</span>
+              <span>11</span>
+              <span>12</span>
+            </div>
+          </div>
+          <div class="dumpster">
+            <div class="dumpster-body">Dumpster</div>
+          </div>
         </div>
-
       </div>
+    </section>
+  </main>
 
+  <!-- IPC overlay -->
+  <div id="ipcOverlay" class="ipc-overlay hidden">
+    <div class="ipc-content">
+      <h2>IPC Required</h2>
+      <button id="resetButton" class="primary-btn">Reset</button>
     </div>
   </div>
 
-  <script src="script.js?v=1.1"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
