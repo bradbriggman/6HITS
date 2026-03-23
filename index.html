@@ -17,13 +17,35 @@
 
   <main class="sim-container">
     <section class="controls-panel">
-      <div class="options-group">
-        <label><input type="radio" name="eventType" value="Approach"> Approach</label>
-        <label><input type="radio" name="eventType" value="Hold"> Hold</label>
-        <label><input type="radio" name="eventType" value="Intercept"> Intercept</label>
-        <label><input type="radio" name="eventType" value="Track"> Track</label>
-      </div>
-      <button id="logButton" class="secondary-btn">Log</button>
+      <div class="counter-row">
+  <span>Approach</span>
+  <button class="minus" data-type="Approach">–</button>
+  <span id="count-Approach">0</span>
+  <button class="plus" data-type="Approach">+</button>
+    </div>
+
+<div class="counter-row">
+  <span>Hold</span>
+  <button class="minus" data-type="Hold">–</button>
+  <span id="count-Hold">0</span>
+  <button class="plus" data-type="Hold">+</button>
+</div>
+
+<div class="counter-row">
+  <span>Intercept</span>
+  <button class="minus" data-type="Intercept">–</button>
+  <span id="count-Intercept">0</span>
+  <button class="plus" data-type="Intercept">+</button>
+</div>
+
+<div class="counter-row">
+  <span>Track</span>
+  <button class="minus" data-type="Track">–</button>
+  <span id="count-Track">0</span>
+  <button class="plus" data-type="Track">+</button>
+</div>
+
+<button id="logButton" class="secondary-btn">Log</button>
     </section>
 
     <section class="factory-scene">
